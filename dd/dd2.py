@@ -6,10 +6,9 @@ from common.util import read_csv_pd, general_reader, read_xlsx_pd
 import stanza
 from stanza.models.common.doc import Document
 import numpy as np
-import csv
+import pandas as pd
 from collections import OrderedDict
 import re
-from copy import deepcopy
 from dependency_distance import get_pos_map
 import logging
 
@@ -153,18 +152,18 @@ def load_sents_parts(fpth, cols=["SENTENCE", "WORD", "IA_LABEL", "POS"]):
     def remove_u200b(ii):
         return str(ii).replace(u"\u200b", "")
 
-    import pandas as pd
     all_ = pd.read_table(fpth, sep="\t")
-    # data = pd.read_table(fpth, sep="\t")[["SENTENCE", "WORD", "IA_LABEL"]].values
     data = all_[cols].values
     sents = OrderedDict()
-    for i in np.arange(data[:, 0].min(), data[:, 0].max() + 1):
-        idx = np.where(data[:, 0] == i)
+    # for i in np.arange(data[:, 0].min(), data[:, 0].max() + 1):
+    for each in data:
+        sid = each[0]
+        idx = np.where(data[:, 0] == sid)
         wid = data[:, 1][idx].tolist()
         sent = data[:, 2][idx].tolist()
         sent = list(map(remove_u200b, sent))
         assert len(wid) == len(sent)
-        sents[i] = list(zip(wid, sent))
+        sents[sid] = list(zip(wid, sent))
     logging.info("sentence count **:{}".format(len(sents)))
     return sents, all_
 
