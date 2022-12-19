@@ -1,3 +1,7 @@
+"""
+parsing only
+"""
+
 from common.util import read_csv_pd, general_reader, read_xlsx_pd
 import stanza
 from stanza.models.common.doc import Document
