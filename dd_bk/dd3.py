@@ -37,7 +37,6 @@ def stanza_dp(sents, lang, processors='tokenize,pos,lemma,depparse'):
         #     for sent in doc.sentences for word in sent.words], sep='\n')
     return res
 
-
 def main(root, out_dir):
     import os
     from glob import glob
