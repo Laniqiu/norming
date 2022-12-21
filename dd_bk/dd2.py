@@ -2,7 +2,7 @@
 parsing only
 """
 
-from common.util import read_csv_pd, general_reader, read_xlsx_pd
+from common.io_utils import read_csv_pd, general_reader, read_xlsx_pd
 import stanza
 from stanza.models.common.doc import Document
 import numpy as np
