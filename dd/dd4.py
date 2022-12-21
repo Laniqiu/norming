@@ -17,10 +17,10 @@ try:
     sys.path.insert(0, "/content/drive/MyDrive/dough/dd")
     sys.path.insert(0, "/content/drive/MyDrive/dough/")
     # colab 需要安装的packages
-    # pkgs = ["stanza", "pycantonese", "jiagu", "jieba"]
-    # for p in pkgs:
-    #     cmd = "pip install {}".format(p)
-    #     os.system(cmd)
+    pkgs = ["stanza", "pycantonese", "jiagu", "jieba"]
+    for p in pkgs:
+        cmd = "pip install {}".format(p)
+        os.system(cmd)
 
 except:
     logging.info("Running Local")
@@ -42,20 +42,22 @@ def pos_for_all(files, out_dir, mpth):
     for f in files:
         if "simp" in f.name:
             lang, pos_func = "zh", pos_tag_mandarin_jiagu
-            upos_map = pos_map
+            mapping = True
         else:
             lang, pos_func = "zh-hant", pos_tag_canto
-            upos_map = None
+            mapping = False
 
         fout = out_dir.joinpath(f.name)
         print("lang:", lang)
         sents, all_ = load_sents_parts(f)
-        segged = pos_func(sents, upos_map)
+        segged = pos_func(sents)
+        # 简体需要映射pos
         # save to file
         headline = ["sid", "wid", "text", "pos", "upos"]
-        headline = "\t".join(headline)
-        # with open(fout, "w", encoding="utf-8") as fw:
-        #     json.dump(segged, fw, ensure_ascii=False)
+        headline = "\t".join(headline) + "\n"
+        breakpoint()
+        with open(fout, "w", encoding="utf-8") as fw:
+            json.dump(segged, fw, ensure_ascii=False)
 
 
 if __name__ == "__main__":

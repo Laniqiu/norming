@@ -8,6 +8,7 @@ import logging
 from common.io_utils import general_reader
 
 logging.basicConfig(level=logging.INFO)
+
 def get_pos_map(mpth):
     """
     记载词性映射字典
@@ -17,6 +18,7 @@ def get_pos_map(mpth):
         n, _, pos = line.strip().split("\t")
         map_d[n] = pos
     return map_d
+
 
 def load_sents_parts(fpth, cols=["SENTENCE", "WORD", "IA_LABEL", "POS"]):
     """
@@ -43,7 +45,8 @@ def load_sents_parts(fpth, cols=["SENTENCE", "WORD", "IA_LABEL", "POS"]):
     return sents, all_
 
 
-def pos_tag_canto(sents, upos_map=None):
+
+def pos_tag_canto(sents):
     """
     粤语词性标注（已分词）
     :param sents:
@@ -83,10 +86,12 @@ def pos_tag_canto(sents, upos_map=None):
             words += stars
               # 得把标点分开
         rr = tagger.pos_tag(words)
-        segged[sid] = (rr, wid)
+        # segged[sid] = (rr, wid)
+        assert len(rr) == len(wid)
+        segged[sid] = list(zip(wid, rr))
     return segged
 
-def pos_tag_mandarin_jiagu(sents, upos_map):
+def pos_tag_mandarin_jiagu(sents):
     """
     简体词性标注（已分词）
     """
@@ -123,8 +128,8 @@ def pos_tag_mandarin_jiagu(sents, upos_map):
             words.append(w)
             wid += stars_id
             words += stars
-
-        poses = [upos_map[p] for p in jiagu.pos(words)]
-        rr = list(zip(words, poses))
-        segged[sid] = (rr, wid)
+        poses = jiagu.pos(words)
+        assert len(poses) == len(wid)
+        # rr = list(zip(wid, words, poses))
+        segged[sid] = list(zip(wid, words, poses))
     return segged
