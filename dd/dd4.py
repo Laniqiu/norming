@@ -62,7 +62,7 @@ def pos_for_all(files, out_dir, mpth):
                 line = "{}\t{}\t{}\t{}\t{}\n".format(sid, wid, word, pos, upos)
                 outt.append(line)
         with open(fout, "w", encoding="utf-8") as fw:
-            json.dump(outt, fw, ensure_ascii=False)
+            fw.writelines(outt)
 
 
 if __name__ == "__main__":
