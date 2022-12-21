@@ -14,19 +14,22 @@ try:
     from google.colab import drive
     logging.info("Running on Colab ...")
     _root = "/content/drive/MyDrive/"
+
     sys.path.insert(0, "/content/drive/MyDrive/dough/dd")
     sys.path.insert(0, "/content/drive/MyDrive/dough/")
-    # colab 需要安装的packages
+    sys.path.insert(0, "/content/drive/MyDrive/")
+    # 需要安装的packages
     pkgs = ["stanza", "pycantonese", "jiagu", "jieba"]
     for p in pkgs:
-        cmd = "pip install {}".format(p)
-        os.system(cmd)
-
+        try:
+            import p
+        except:
+            cmd = "pip install {}".format(p)
+            os.system(cmd)
 except:
     logging.info("Running Local")
     _root = "/Users/laniqiu/My Drive/"
 
-import json
 from utils import get_pos_map, load_sents_parts, \
     pos_tag_mandarin_jiagu, pos_tag_canto
 
@@ -62,7 +65,7 @@ def pos_for_all(files, out_dir, mpth):
                 line = "{}\t{}\t{}\t{}\t{}\n".format(sid, wid, word, pos, upos)
                 outt.append(line)
         with open(fout, "w", encoding="utf-8") as fw:
-            json.dump(outt, fw, ensure_ascii=False)
+            fw.writelines(outt)
 
 
 if __name__ == "__main__":
