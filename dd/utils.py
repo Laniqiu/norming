@@ -84,11 +84,11 @@ def pos_tag_canto(sents):
             words.append(w)
             wid += stars_id
             words += stars
-              # 得把标点分开
+            # 得把标点分开
         rr = tagger.pos_tag(words)
-        # segged[sid] = (rr, wid)
         assert len(rr) == len(wid)
-        segged[sid] = list(zip(wid, rr))
+        _, poses = list(zip(*rr))
+        segged[sid] = list(zip(wid, words, poses))
     return segged
 
 def pos_tag_mandarin_jiagu(sents):
@@ -130,6 +130,5 @@ def pos_tag_mandarin_jiagu(sents):
             words += stars
         poses = jiagu.pos(words)
         assert len(poses) == len(wid)
-        # rr = list(zip(wid, words, poses))
         segged[sid] = list(zip(wid, words, poses))
     return segged

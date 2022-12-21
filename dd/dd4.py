@@ -42,22 +42,27 @@ def pos_for_all(files, out_dir, mpth):
     for f in files:
         if "simp" in f.name:
             lang, pos_func = "zh", pos_tag_mandarin_jiagu
-            mapping = True
         else:
             lang, pos_func = "zh-hant", pos_tag_canto
-            mapping = False
-
-        fout = out_dir.joinpath(f.name)
         print("lang:", lang)
+        fout = out_dir.joinpath(f.name)
         sents, all_ = load_sents_parts(f)
         segged = pos_func(sents)
         # 简体需要映射pos
         # save to file
-        headline = ["sid", "wid", "text", "pos", "upos"]
-        headline = "\t".join(headline) + "\n"
-        breakpoint()
+        headlist = ["sid", "wid", "text", "pos", "upos"]
+        headline = "\t".join(headlist) + "\n"
+        outt = [headline]
+        for sid, values in segged.items():
+            for wid, word, pos in values:
+                if lang == "zh-hant":
+                    upos = " "
+                else:
+                    upos = pos_map[pos]
+                line = "{}\t{}\t{}\t{}\t{}\n".format(sid, wid, word, pos, upos)
+                outt.append(line)
         with open(fout, "w", encoding="utf-8") as fw:
-            json.dump(segged, fw, ensure_ascii=False)
+            json.dump(outt, fw, ensure_ascii=False)
 
 
 if __name__ == "__main__":
