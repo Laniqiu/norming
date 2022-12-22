@@ -59,7 +59,7 @@ def pos_for_all(files, out_dir, mpth):
         for sid, values in segged.items():
             for wid, word, pos in values:
                 if lang == "zh-hant":
-                    upos = " "
+                    upos = pos
                 else:
                     upos = pos_map[pos]
                 line = "{}\t{}\t{}\t{}\t{}\n".format(sid, wid, word, pos, upos)
