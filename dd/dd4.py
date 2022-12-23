@@ -3,34 +3,19 @@ planb:
     加载原始数据(已分词) -> +标注词性 -> 保存
 """
 
-import os
-import sys
 import logging
-from pathlib import Path
-
 logging.basicConfig(level=logging.INFO)
 
 try:
     from google.colab import drive
     logging.info("Running on Colab ...")
     _root = "/content/drive/MyDrive/"
-
-    sys.path.insert(0, "/content/drive/MyDrive/dough/dd")
-    sys.path.insert(0, "/content/drive/MyDrive/dough/")
-    sys.path.insert(0, "/content/drive/MyDrive/")
-    # 需要安装的packages
-    pkgs = ["stanza", "pycantonese", "jiagu", "jieba"]
-    for p in pkgs:
-        try:
-            import p
-        except:
-            cmd = "pip install {}".format(p)
-            os.system(cmd)
 except:
     logging.info("Running Local")
     _root = "/Users/laniqiu/My Drive/"
 
-from utils import get_pos_map, load_sents_parts, \
+
+from otr_utils import get_pos_map, load_sents_parts, \
     pos_tag_mandarin_jiagu, pos_tag_canto
 
 def pos_for_all(files, out_dir, mpth):
@@ -67,8 +52,66 @@ def pos_for_all(files, out_dir, mpth):
         with open(fout, "w", encoding="utf-8") as fw:
             fw.writelines(outt)
 
+def add_jpos(files):
+    """add jieba pos to original files"""
+
+    import jieba.posseg as tagger  #
+
+    for f in files:
+        print(f.name)
+        data = f.open().readlines()
+        for _, line in enumerate(data):
+            if _ == 0:
+                data[_] = line.strip() + "\t{}\n".format("jpos")
+                continue
+            sid, wid, text, pos, upos = line.strip().split("\t")
+            jposs = [p for (w, p) in tagger.cut(text)]
+            jpos = jposs[0] if len(jposs) == 1 else "-"
+            data[_] = line.strip() + "\t{}\n".format(jpos)
+        with open(f, "w") as fw:
+            fw.writelines(data)
+
+
+def check_(files, jmpth):
+    """
+    check and correct some pos tags
+    """
+    pass
+
+
+def add_xpos(xfiles, pdir):
+    """
+    add xpos to posed files
+    xfiles: stanza processed files
+    pdir: dir of posed files"""
+
+    import pandas as pd
+    for xf in xfiles:
+        data = pd.read_table(xf, sep="\t").values[:, 3:6]
+        udict = dict(zip(data[:, 0], data[:, 1]))
+        xdict = dict(zip(data[:, 0], data[:, 2]))
+        assert(len(udict) == len(xdict))
+        fout = pdir.joinpath(xf.name)
+        print(fout)
+        data = fout.open("r").readlines()
+        for idx, line in enumerate(data):
+            if idx == 0:
+                data[idx] = line.strip() + "\t{}\n".format("xpos")
+                continue
+            sid, wid, text, pos, upos, jpos, apos = line.strip().split("\t")
+            if text in udict and udict[text] == apos:
+                xpos = xdict[text]
+            else:
+                xpos = ""
+            data[idx] = "\t".join([sid, wid, text, pos, upos, jpos, apos, xpos]) + "\n"
+        with open(fout, "w") as fw:
+            fw.writelines(data)
+
+
+
 
 if __name__ == "__main__":
+    from pathlib import Path
     _p = Path(_root).joinpath("ddata")
     files = _p.joinpath("annotator_avg").glob("*.txt")  # 原始数据
     out_dir = _p.joinpath("posed")  # 词性标注后数据

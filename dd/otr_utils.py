@@ -32,9 +32,8 @@ def load_sents_parts(fpth, cols=["SENTENCE", "WORD", "IA_LABEL", "POS"]):
     all_ = pd.read_table(fpth, sep="\t")
     data = all_[cols].values
     sents = OrderedDict()
-    # for i in np.arange(data[:, 0].min(), data[:, 0].max() + 1):
-    for each in data:
-        sid = each[0]
+    sids = set(data[:, 0].tolist())
+    for sid in sids:
         idx = np.where(data[:, 0] == sid)
         wid = data[:, 1][idx].tolist()
         sent = data[:, 2][idx].tolist()
