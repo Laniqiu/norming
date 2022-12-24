@@ -44,7 +44,6 @@ def load_sents_parts(fpth, cols=["SENTENCE", "WORD", "IA_LABEL", "POS"]):
     return sents, all_
 
 
-
 def pos_tag_canto(sents):
     """
     粤语词性标注（已分词）

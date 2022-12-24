@@ -123,9 +123,10 @@ def ldd2head(doc, wids):
     # return np.array(diss).reshape((-1, 1)), np.array(details).reshape((-1, 1))
     return np.array(diss).reshape((-1, 1)), details
 
-def parsing_dd(files):
+def parsing_dd(files, cols=["sid", "wid", "text", "upos*", "xpos"]):
     """
     parsing and cal dd and save to original files
+    file in files: posed texts with sent id, word id, etc.
     """
     nlp_tra = stanza.Pipeline(lang="zh-hant",
                               processors='depparse', depparse_pretagged=True)
@@ -133,16 +134,16 @@ def parsing_dd(files):
                               processors='depparse', depparse_pretagged=True)
 
     for f in files:
-        logging.info(f.name)
+        logging.info("Processing: {}".format(f.name))
         if "simp" in f.name:
             lang = "zh-hans"
             nlp = nlp_sim
         else:
             lang = "zh-hant"
             nlp = nlp_tra
+
         logging.info("lang:{}".format(lang))
 
-        cols = ["sid", "wid", "text", "upos*", "xpos"]
         all_ = pd.read_table(f, sep="\t")
         data = all_[cols].values
 

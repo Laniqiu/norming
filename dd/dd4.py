@@ -108,8 +108,6 @@ def add_xpos(xfiles, pdir):
             fw.writelines(data)
 
 
-
-
 if __name__ == "__main__":
     from pathlib import Path
     _p = Path(_root).joinpath("ddata")
