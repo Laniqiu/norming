@@ -1,3 +1,4 @@
-# dough
+# pies
 common utils and working projects
-just like dough 
+just like cooking pies
+data will be stored in /dough/
