@@ -11,11 +11,14 @@ from sklearn.metrics import explained_variance_score
 from sklearn.metrics import r2_score
 
 
-def load_data(fname, chinese=True):
+def load_data(fname, irow=5, icol=11, ecol=79, chinese=True):
     """
 
-    @param fname:
-    @param chinese: 是否中文数据集
+    @param fname: 数据集文件名，xlsx
+    @param irow: 从irow行开始
+    @param icol: 从icol列开始
+    @param ecol: 从ecol列结束
+    @param chinese: 是否为中文数据集
     @return:
     """
     ds = {}
@@ -24,12 +27,11 @@ def load_data(fname, chinese=True):
     df = pd.read_excel(fname)
 
     # encoding is utf-8 when dealing with Chinese data
-    # for i in range(5, len(df.words)):
-    for i in range(5, 3):
+    for i in range(irow, len(df.words)):
         word = df.words[i]
-        ds[word] = i - 5
+        ds[word] = i - irow
 
-        vector = df.iloc[i].iloc[11:79].values
+        vector = df.iloc[i].iloc[icol:ecol].values
         matrix.append(np.array(vector, dtype=float))
 
     ds['_matrix_'] = np.around((np.array(matrix)), decimals=4)
@@ -174,11 +176,33 @@ def spearman_cof(Y_test, Y_pred):
 
     Y_pred = np.array(Y_pred)
     Y_test = np.array(Y_test)
-    for i in range(len(Y_test[0])):
+    for i in range(len(Y_test)):
         var = spearmanr(Y_test[i], Y_pred[i])[0]
         spear_var.append(var)
 
     return np.array(spear_var, dtype=float)
+
+def return_wf_spearman(Y_test, Y_pred):
+    """
+
+    @return: spearman cof across words & features
+    """
+    sp_w, sp_f = [], []
+    Y_pred, Y_test = np.asarray(Y_pred), np.asarray(Y_test)
+    if Y_test.shape != Y_pred.shape:
+        assert False, "The size of the prediction array Y and of the test array Y are different."
+
+    wn, fn = Y_test.shape
+    for i in range(fn):
+        var = spearmanr(Y_test[:, i], Y_pred[:, i])[0]
+        sp_f.append(var)
+
+    for i in range(wn):
+        var = spearmanr(Y_test[i], Y_pred[i])[0]
+        sp_w.append(var)
+
+    return np.array(sp_f, dtype=float), np.array(sp_w, dtype=float)
+
 
 
 
