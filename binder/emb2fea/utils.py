@@ -24,7 +24,8 @@ def load_data(fname, chinese=True):
     df = pd.read_excel(fname)
 
     # encoding is utf-8 when dealing with Chinese data
-    for i in range(5, len(df.words)):
+    # for i in range(5, len(df.words)):
+    for i in range(5, 3):
         word = df.words[i]
         ds[word] = i - 5
 
@@ -131,19 +132,12 @@ def assign_emb_dataset(ds, ds_words, embs, dim, norm_dim=68):
         vec = get_vec(word, embs)
         norm = get_vec(word, ds)
 
-
-
         if len(vec) != dim or len(norm) != norm_dim:
             continue
 
         X.append(vec)
         Y.append(norm)
     X, Y = np.array(X), np.array(Y)
-    """print (X)
-    print (Y)
-    print (type(X))
-    print (type(Y))"""
-
     return X, Y, words
 
 
@@ -166,6 +160,28 @@ def return_Spearman_simple(Y_test, Y_pred):
         spear_var.append(var)
 
     return np.array(spear_var, dtype=float)
+
+
+def spearman_cof(Y_test, Y_pred):
+    """
+    @param Y_test: np array
+    @param Y_pred: np array
+    @return:
+    """
+    spear_var = []
+    if np.asarray(Y_test).shape != np.asarray(Y_pred).shape:
+        assert False, "The size of the prediction array Y and of the test array Y are different."
+
+    Y_pred = np.array(Y_pred)
+    Y_test = np.array(Y_test)
+    for i in range(len(Y_test[0])):
+        var = spearmanr(Y_test[i], Y_pred[i])[0]
+        spear_var.append(var)
+
+    return np.array(spear_var, dtype=float)
+
+
+
 
 
 

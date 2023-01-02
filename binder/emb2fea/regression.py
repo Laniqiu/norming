@@ -9,9 +9,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import LeaveOneOut
-from scipy.stats import spearmanr
-from bokeh.themes import default
 import numpy as np
+
 
 from utils import *
 from common import logging, get_root
@@ -24,7 +23,7 @@ def main(fpth, efolder):
     @return:
     """
     logging.info("load data from {} ...".format(fpth.name))
-    _data = load_data(fpth)
+    _data = load_data(fpth)  # todo 测试, 后面需要修改
 
     epths = efolder.glob("*")
     for epth in epths:
@@ -37,16 +36,16 @@ def main(fpth, efolder):
         vectors, dim = load_embeddings(epth, _data)
 
         X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
-        breakpoint()
 
         loo = LeaveOneOut()
         logging.info("number of splits {}".format(loo.get_n_splits(X)))
         Spear, Ms, Rm = [], [], []
         Y_output, Y_gold = [], []
+        """ training with different regressors"""
         for _, (train_index, test_index) in enumerate(loo.split(X)):
             X_train, X_test = X[train_index], X[test_index]
             Y_train, Y_test = Y[train_index], Y[test_index]
-            # different regressors/ models
+
             model = LinearRegression().fit(X_train, Y_train)
             # model = Ridge().fit(X_train, Y_train)
             # model = RandomForestRegressor(n_estimators=10).fit(X_train, Y_train)
@@ -55,35 +54,32 @@ def main(fpth, efolder):
             # model = Lasso(alpha=0.1).fit(X_train, Y_train)
 
             Y_pred = model.predict(X_test)
-            mse, rmse = return_MSE_by_Feature(Y_test, Y_pred)  # rmse is the sqrt of mse
+            # mse, rmse = return_MSE_by_Feature(Y_test, Y_pred)  # rmse is the sqrt of mse
+            # Ms.append(mse)
+            # Rm.append(rmse)
 
             for i in range(Y_pred.shape[0]):
                 Y_output.append(Y_pred[i])
                 Y_gold.append(Y_test[i])
 
-            Ms.append(mse)
-            Rm.append(rmse)
 
-            # 	print ( "Global evaluation score for the mapper: " + map )
-        Ms_means = np.mean(Ms, axis=0)
-        Rm_means = np.mean(Rm, axis=0)
+        """ evaluation """
+        # mse & rmse, with variance
+        # Ms_means = np.mean(Ms, axis=0)
+        # Rm_means = np.mean(Rm, axis=0)
+        # var_mse = np.var(Ms, axis=0)
+        # var_rms = np.var(Rm, axis=0)
 
+        # compute spearman across words & features??
+        # across features
         Sp_means = return_Spearman_simple(Y_gold, Y_output)
+        sp_means = spearman_cof(Y_gold, Y_output)
+        breakpoint()
 
-        print(Ms_means)
-        print(Rm_means)
-        print(Sp_means)
 
-        # evaluation
-        # Y_output, Y_gold = np.array(Y_output), np.array(Y_gold)
-        # rows, cols = Y_gold.shape
-
-        # result presenting
-        # for i in range(0, cols):
-        #     sense_gold = Y_gold[:, i]
-        #     sense_output = Y_output[:, i]
-        #     score = spearmanr(sense_gold, sense_output)
-        # breakpoint()
+        # print(Ms_means)
+        # print(Rm_means)
+        # print(Sp_means)
 
 
 if __name__ == '__main__':
