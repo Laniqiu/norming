@@ -37,18 +37,16 @@ def main(fpth, efolder):
         vectors, dim = load_embeddings(epth, _data)
 
         X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
+        breakpoint()
 
         loo = LeaveOneOut()
         logging.info("number of splits {}".format(loo.get_n_splits(X)))
         Spear, Ms, Rm = [], [], []
         Y_output, Y_gold = [], []
-
-        for i, (train_index, test_index) in enumerate(loo.split(X)):
-
+        for _, (train_index, test_index) in enumerate(loo.split(X)):
             X_train, X_test = X[train_index], X[test_index]
             Y_train, Y_test = Y[train_index], Y[test_index]
-
-            # different regressors
+            # different regressors/ models
             model = LinearRegression().fit(X_train, Y_train)
             # model = Ridge().fit(X_train, Y_train)
             # model = RandomForestRegressor(n_estimators=10).fit(X_train, Y_train)
@@ -77,15 +75,15 @@ def main(fpth, efolder):
         print(Sp_means)
 
         # evaluation
-        Y_output, Y_gold = np.array(Y_output), np.array(Y_gold)
-        rows, cols = Y_gold.shape
+        # Y_output, Y_gold = np.array(Y_output), np.array(Y_gold)
+        # rows, cols = Y_gold.shape
 
         # result presenting
-        for i in range(0, cols):
-            sense_gold = Y_gold[:, i]
-            sense_output = Y_output[:, i]
-            score = spearmanr(sense_gold, sense_output)
-        breakpoint()
+        # for i in range(0, cols):
+        #     sense_gold = Y_gold[:, i]
+        #     sense_output = Y_output[:, i]
+        #     score = spearmanr(sense_gold, sense_output)
+        # breakpoint()
 
 
 if __name__ == '__main__':

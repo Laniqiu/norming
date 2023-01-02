@@ -11,7 +11,7 @@ import inspect
 LOGGER_NAME = os.getenv("LOGGER_NAME", "root")
 LOGGER_LEVEL = os.getenv("LOGGER_LEVEL", "INFO")
 REPO = os.getenv("REPO", "/pies/")
-FRAME = 3
+FRAME = -1
 LOGGER_FORMAT = "%(asctime)s-%(levelname)s-%(message)s"
 DATE_FORMAT = "%y-%m-%d %H:%M:%S"
 LOG_FILE = os.getenv("LOG_FILE", True)

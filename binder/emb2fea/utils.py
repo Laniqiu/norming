@@ -159,17 +159,12 @@ def return_Spearman_simple(Y_test, Y_pred):
     if np.asarray(Y_test).shape != np.asarray(Y_pred).shape:
         assert False, "The size of the prediction array Y and of the test array Y are different."
 
-    # Y_test, Y_pred = np.array(Y_test), np.array(Y_pred)
-    # print (Y_test)
-    # print (Y_pred)
-
     Y_pred = np.array(Y_pred)
     Y_test = np.array(Y_test)
     for i in range(len(Y_test[0])):
         var = spearmanr(Y_test[:, i], Y_pred[:, i])[0]
         spear_var.append(var)
 
-    # print (spear_var)
     return np.array(spear_var, dtype=float)
 
 
