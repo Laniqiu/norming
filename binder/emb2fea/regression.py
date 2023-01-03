@@ -11,6 +11,9 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import LeaveOneOut
 import numpy as np
 
+import utils
+from imp import reload
+reload(utils)
 from utils import *
 from common import logging, get_root
 
@@ -27,13 +30,16 @@ def main(fpth, efolder):
     loo = LeaveOneOut()
 
     for epth in efolder.glob("*"):
-        if epth.suffix not in emb_sufix:  # in case hidden files exist
+        # if epth.suffix not in emb_sufix:  # in case hidden files exist
+        #     continue
+        #
+        if epth.name not in ["ppmi.wiki.word"]:  # Todo
             continue
-
         logging.info("load embeddings from {} ...".format(epth.name))
         vectors, dim = load_embeddings(epth, _data)
         X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
-
+        
+        breakpoint()
         logging.info("number of splits {}".format(loo.get_n_splits(X)))
         Spear, Ms, Rm = [], [], []
         for ir, regressor in enumerate(regressors):

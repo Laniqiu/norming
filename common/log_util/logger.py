@@ -19,7 +19,7 @@ class MyLogger(object):
             stream_handler.setFormatter(fmt)
             logger.addHandler(stream_handler)
 
-            if LOG_FILE:
+            if LOG_OUT:
                 file_handler = logging.FileHandler(filename=get_logfile(), mode='a')
                 file_handler.setLevel(LOGGER_LEVEL)
                 file_handler.setFormatter(fmt)

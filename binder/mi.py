@@ -4,6 +4,7 @@ calculate mi (replication on binder data?)
 import os
 import numpy as np
 import pandas as pd
+
 from sklearn.metrics import normalized_mutual_info_score, mutual_info_score, adjusted_mutual_info_score
 from sklearn.preprocessing import KBinsDiscretizer
 from sklearn.impute import SimpleImputer
@@ -154,7 +155,6 @@ def generate_heatmap(mis, n, headline, sort_head, spth):
     plt.savefig(spth)
     logging.info("save pic at %s" % spth)
     plt.show()
-
 
 
 if __name__ == '__main__':
