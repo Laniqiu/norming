@@ -14,8 +14,8 @@ REPO = os.getenv("REPO", "/pies/")
 FRAME = 3
 LOGGER_FORMAT = "%(asctime)s-%(levelname)s-%(message)s"
 DATE_FORMAT = "%y-%m-%d %H:%M:%S"
-LOG_FILE = os.getenv("LOG_FILE", True)
-HANDLER_NUM = 2 if LOG_FILE else 1
+LOG_OUT = os.getenv("LOG_FILE", True)
+HANDLER_NUM = 2 if LOG_OUT else 1
 
 
 def get_frame(which_frame, repo):

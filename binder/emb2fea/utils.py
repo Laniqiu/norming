@@ -64,6 +64,8 @@ def load_embeddings(fname, ds_words):
             if word in ['', ' ', '\t', '\n']:
                 print('Word {} has no value.'.format(word))
                 continue
+            
+            breakpoint()
             try:
                 vec = [float(x) for x in line[1:]]
                 if len(vec) == dims:
