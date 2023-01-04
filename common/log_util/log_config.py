@@ -2,51 +2,43 @@
 """
 @author: Lani QIU
 @time: 1/1/2023 8:02 pm
-
+logging 配置
 """
-import os
-import inspect
 
+LOGGER_NAME = "root"
+LOG_FILE = ""
+# 设置
+MAX_BYTES = 512000
+BACKUP_COUNT = 10
 
-LOGGER_NAME = os.getenv("LOGGER_NAME", "root")
-LOGGER_LEVEL = os.getenv("LOGGER_LEVEL", "INFO")
-REPO = os.getenv("REPO", "/pies/")
-FRAME = 3
-LOGGER_FORMAT = "%(asctime)s-%(levelname)s-%(message)s"
-DATE_FORMAT = "%y-%m-%d %H:%M:%S"
-LOG_OUT = os.getenv("LOG_FILE", True)
-HANDLER_NUM = 2 if LOG_OUT else 1
+# 等级
+# CRITICAL=50 ERROR=40 WARNING=30 INFO=20 DEBUG=10 NOTSET=0'
+CONSOLE_LEVEL = 10
+FILE_LEVEL = 20
+LOG_IN_CONSOLE = True
+LOG_IN_FILE = True
 
+PLAIN_FMT = "%(asctime)s-%(levelname)s-%(filename)s-%(lineno)s: %(message)s"
+COLOR_FMT = "%(log_color)s%(asctime)s-%(level_log_color)s%(levelname)s%(reset)s" \
+      "%(log_color)s-%(filename)s-%(lineno)s: %(message)s"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-def get_frame(which_frame, repo):
-    """
-    @return: filename and lineno
-    """
-    callerframerecord = inspect.stack()[which_frame]
-    frame = callerframerecord[0]
-    info = inspect.getframeinfo(frame)
-    try:
-        file, line = info.filename.rsplit(repo)[1], str(info.lineno)
-    except:
-        file, line = "*", "*"
-
-    return file, line
-
-
-def get_logfile(fmt="%y-%m-%d-%H:%M"):
-    """
-    get log file
-    @param flag:
-    @param fmt:
-    @return:
-    """
-    from datetime import datetime
-    dt = datetime.now().strftime(fmt)
-    name = "{}.log".format(dt)
-    return name
-
-
-
+LOG_COLORS = {
+    'DEBUG': 'white',
+    'INFO': 'white',
+    'WARNING': 'white',
+    'ERROR': 'white',
+    'CRITICAL': 'white',
+}
+# 颜色配置
+SECONDARY_COLORS = {
+    'level': {
+        "INFO": "blue",
+        'ERROR': 'red',
+        'CRITICAL': 'bold_red',
+        'WARNING': 'yellow',
+    }
+}
 
 
 

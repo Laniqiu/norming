@@ -1,6 +1,5 @@
-from .log_util import MyLogger
+from .log_util import logger as logging
 
-logging = MyLogger()
 
 def get_root():
     try:

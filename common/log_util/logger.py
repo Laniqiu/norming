@@ -4,54 +4,63 @@
 @time: 1/1/2023 9:51 am
 """
 import logging
+from logging.handlers import TimedRotatingFileHandler
+import threading
+import os
+from colorlog import ColoredFormatter
 
 from .log_config import *
 
 
 class MyLogger(object):
-    def __init__(self):
-        logger = logging.getLogger(LOGGER_NAME)
-        if len(logger.handlers) <= HANDLER_NUM:
-            logger.setLevel(LOGGER_LEVEL)
-            fmt = logging.Formatter(LOGGER_FORMAT, datefmt=DATE_FORMAT)
-            stream_handler = logging.StreamHandler()
-            stream_handler.setLevel(LOGGER_LEVEL)
-            stream_handler.setFormatter(fmt)
-            logger.addHandler(stream_handler)
 
-            if LOG_OUT:
-                file_handler = logging.FileHandler(filename=get_logfile(), mode='a')
-                file_handler.setLevel(LOGGER_LEVEL)
-                file_handler.setFormatter(fmt)
-                logger.addHandler(file_handler)
+    def __int__(self):
+        pass
 
-        self.logger = logger
+    def __new__(cls):
+        mutex = threading.Lock()
+        mutex.acquire()  # 上锁，防止多线程下出问题
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(MyLogger, cls).__new__(cls)
+            cls.instance.log_filename = LOG_FILE
 
+            if LOG_IN_FILE and not cls.instance.log_filename:
+                # 日志存放路径
+                cls.instance.log_filename = '../logs/log.log'
 
-    def format_msg(self, msg):
-        """
-        msg: original message
-        get filename and lineno of the logging func and add to original msg
-        @return:
-        """
-        file, line = get_frame(FRAME, REPO)
-        return "{}->{}: {}".format(file, line, msg)
+            cls.instance.logger = logging.getLogger(LOGGER_NAME)
+            cls.instance.__config_logger()
+            cls.instance.logger.setLevel(1)
+        mutex.release()
+        return cls.instance
 
-    def debug(self, msg):
-        return self.logger.debug(self.format_msg(msg))
+    def get_logger(self):
+        return self.logger
 
-    def info(self, msg):
+    def __config_logger(self):
+        # 设置日志格式
+        plain_formatter = logging.Formatter(PLAIN_FMT, datefmt=DATE_FORMAT)
+        corlor_formatter = ColoredFormatter(fmt=COLOR_FMT,
+                                            datefmt=DATE_FORMAT,
+                                            log_colors=LOG_COLORS,
+                                            secondary_log_colors=SECONDARY_COLORS,
+                                            style="%")
+        """ 控制台日志开关"""
+        if LOG_IN_CONSOLE:  # 如果开启控制台日志，非1 关闭
+            console = logging.StreamHandler()
+            console.setFormatter(corlor_formatter)
+            console.setLevel(CONSOLE_LEVEL)
+            self.logger.addHandler(console)
+            # print(u'当前控制台生效的日志级别为：', self.logger.getEffectiveLevel())
 
-        return self.logger.info(self.format_msg(msg))
+        if LOG_IN_FILE:  # 如果开启文件日志
 
-    def warning(self, msg):
-        return self.logger.warning(self.format_msg(msg))
+            rt_file_handler = TimedRotatingFileHandler(self.log_filename, when='D', interval=1,
+                                                       backupCount=BACKUP_COUNT)
+            rt_file_handler.setFormatter(plain_formatter)
+            rt_file_handler.setLevel(FILE_LEVEL)
+            self.logger.addHandler(rt_file_handler)
 
-    def error(self, msg):
-        return self.logger.error(self.format_msg(msg))
-
-    def critical(self, msg):
-        return self.logger.critical(self.format_msg(msg))
 
 
 
