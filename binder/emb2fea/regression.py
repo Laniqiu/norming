@@ -28,18 +28,17 @@ def main(fpth, efolder):
     _data = load_data(fpth)  # todo 测试, 后面需要修改
 
     loo = LeaveOneOut()
-
     for epth in efolder.glob("*"):
-        # if epth.suffix not in emb_sufix:  # in case hidden files exist
-        #     continue
-        #
-        if epth.name not in ["ppmi.wiki.word"]:  # Todo
+        if epth.suffix not in emb_sufix:  # in case hidden files exist
+            continue
+
+        logging.info("skip ppmi ...")
+        if epth.name in ["ppmi.wiki.word"]:  # todo 先跳过ppmi
             continue
         logging.info("load embeddings from {} ...".format(epth.name))
         vectors, dim = load_embeddings(epth, _data)
         X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
-        
-        breakpoint()
+
         logging.info("number of splits {}".format(loo.get_n_splits(X)))
         Spear, Ms, Rm = [], [], []
         for ir, regressor in enumerate(regressors):
@@ -62,8 +61,7 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name):
     for _, (train_index, test_index) in enumerate(loo.split(X)):
         X_train, X_test = X[train_index], X[test_index]
         Y_train, Y_test = Y[train_index], Y[test_index]
-        # for ir, regressor in enumerate(regressors):
-        #     logging.info("current regressor no. is {}".format(ir))
+
         model = regressor.fit(X_train, Y_train)
         Y_pred = model.predict(X_test)
         # mse, rmse = return_MSE_by_Feature(Y_test, Y_pred)  # rmse is the sqrt of mse
@@ -98,12 +96,15 @@ if __name__ == '__main__':
     if not out_dir.exists():
         out_dir.mkdir()
     emb_sufix = [".vec", ".word"]
-    efolder = _path.joinpath("norming/embeddings/")  # emb folders
-    logging.info("initialize regressors ... ")
-    regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
-                  RandomForestRegressor(n_estimators=10),
-                  MLPRegressor(hidden_layer_sizes=(50, 10),
-                               activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
+    # efolder = _path.joinpath("norming/embeddings/")  # emb folders
+    efolder = Path("/content/dough/embeddings")
+    logging.info("Initialize regressors ... ")
+    # regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
+    #               RandomForestRegressor(n_estimators=10),
+    #               MLPRegressor(hidden_layer_sizes=(50, 10),
+    #                            activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
+    logging.info("Only train on Lasso ...")
+    regressors = [Lasso()]
 
     main(fpth, efolder)
 

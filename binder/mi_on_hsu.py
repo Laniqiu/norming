@@ -1,8 +1,9 @@
 
 import pandas as pd
-import logging
+from common import logging
 
-from mi import cal_pairwise_mi, cal_bt_attrs, generate_heatmap
+from mi import cal_pairwise_mi, cal_bt_attrs, \
+    generate_heatmap, visualize_for_me
 
 
 def main(ratings, attr_names, sorted_attrs, spth, handle_nans="pad"):
@@ -17,11 +18,13 @@ def main(ratings, attr_names, sorted_attrs, spth, handle_nans="pad"):
     n = ratings.shape[1]
     logging.info("compute pairwise mi")
     mis = cal_bt_attrs(n, ratings, method=handle_nans)
+    logging.info("compute in-group pairwise mi")
     # groups = df[1]['Group'].dropna().values.tolist()
     # grp_attr = df[1]["Group-Attr"].dropna().tolist()
-    # logging.info("compute in-group pairwise mi")
     # gr_scores = cal_pairwise_mi(groups, grp_attr, attr_names, mis)
-    logging.info("draw heatmap")
+    visualize_for_me(mis, attr_names, {})
+
+    # logging.info("draw heatmap")
     # generate_heatmap(mis.copy(), n, attr_names, sorted_attrs, spth)
 
 

@@ -6,7 +6,6 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 import threading
-import os
 from colorlog import ColoredFormatter
 
 from .log_config import *

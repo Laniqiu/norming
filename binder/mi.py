@@ -79,28 +79,37 @@ def cal_pairwise_mi(groups, grp_attr, attr_names, mis):
     return ga_scores
 
 
-def visualize_for_me(mis, attr_names, ga_scores, top=10):
+def visualize_for_me(mis, attr_names, ga_scores, top=10, bottom=10):
     """
     personal visualization
     """
+    n = mis.shape[0]
+    tgt_idx = [(i, j) for i in np.arange(n) for j in np.arange(i + 1, n)]  #
+    scores = np.array([mis[idx] for idx in tgt_idx])  # 避免mis初始化的0的影响
     print("mean: ", mis.mean())
     print("max: ", mis.max())
-    print("pairwise mi reported in Binder et al's ")
-    print(np.where(mis == mis.max()))
-    print(mis[6, 18])
-    print(mis[44, 45])
-    print(mis[32, 36])
-    print(mis[27, 28])
-    print(mis[46, 48])
-    print("the top:")
-    ft = mis.flatten()
-    aa = ft[np.argsort(-ft)][:top]
+    # print("pairwise mi reported in Binder et al's ")
+    # print(np.where(mis == mis.max()))
+    # print(mis[6, 18])
+    # print(mis[44, 45])
+    # print(mis[32, 36])
+    # print(mis[27, 28])
+    # print(mis[46, 48])
+    print("the top {}:".format(top))
+    aa = np.argsort(-scores)[:top]
     for i in range(top):
-        idx = np.where(mis==aa[i])
-        print('{}-{}\t{}'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], aa[i]))
-    print("in-group pairwise mi")
-    for k, v in ga_scores.items():
-        print('{}\t{}'.format(k, v))
+        idx = np.where(mis == scores[aa[i]])
+        print('{}-{}\t{}'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], scores[aa[i]]))
+
+    print("the bottom {}:".format(bottom))
+    bb = np.argsort(scores)[:bottom]
+    for i in range(bottom):
+        idx = np.where(mis == scores[bb[i]])
+        print('{}-{}\t{}'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], scores[bb[i]]))
+
+    # print("in-group pairwise mi")
+    # for k, v in ga_scores.items():
+    #     print('{}\t{}'.format(k, v))
 
 
 def cal_bt_attrs(n, ratings, method):
