@@ -4,16 +4,16 @@
 @time: 7/1/2023 5:03 pm
 
 """
-def get_root():
-    try:
-        from google.colab import drive
-        return "/content/drive/MyDrive/"
-    except:
-        return "/Users/laniqiu/My Drive"
 
 
-# from .log_util import logger as logging
+try:
+    from google.colab import drive
+    adr = "/content/drive/MyDrive/"
+except:
+    adr = "/Users/laniqiu/My Drive"
+
 
 from .log_util import MyLogger
-logging = MyLogger(get_root()).get_logger()
+logging = MyLogger(adr).get_logger()
+logging.info("\nThis is Lani's Little Bakery\nAddress: {}".format(adr))
 

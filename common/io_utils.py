@@ -5,6 +5,7 @@ commonly used functions: write, read, etc.
 """
 import codecs
 
+
 def general_reader(fpth, encoding="utf-8", mode="r"):
     """
     open and read file, return a list

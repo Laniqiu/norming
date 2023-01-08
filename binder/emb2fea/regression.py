@@ -15,7 +15,7 @@ import utils
 from imp import reload
 reload(utils)
 from utils import *
-from common import logging, get_root
+from common.setup import logging, adr
 
 
 def main(fpth, efolder):
@@ -89,7 +89,7 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name):
 
 
 if __name__ == '__main__':
-    _root = get_root()
+    _root = adr
     from pathlib import Path
     _path = Path(_root).joinpath("dough")
 

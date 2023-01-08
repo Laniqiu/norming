@@ -9,7 +9,7 @@
 # import imp
 # import common
 # imp.reload(common)
-from common.setup import logging, get_root
+from common.setup import logging, adr
 from common.io_utils import general_reader, general_writer
 
 
@@ -39,7 +39,7 @@ def check(fpth, fout, chunk=5000):
 
 if __name__ == "__main__":
     from pathlib import Path
-    _root = Path(get_root()).joinpath("dough")
+    _root = Path(adr).joinpath("dough")
 
     # check(_root.joinpath("embeddings/wiki.zh.vec"),
     #       _root.joinpath("ppmi/wiki.zh.words")

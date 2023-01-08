@@ -5,6 +5,5 @@
 
 """
 from .logger import MyLogger
-# logger = MyLogger().get_logger()
 
 

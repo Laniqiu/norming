@@ -44,7 +44,9 @@ def svd(M, dim=300, w=1):
 
     # recombine the matrices
     logging.info("truncated matrix:")
-    rMatrix = dot(U, linalg.diagsvd(s, dim, len(V)))
+    # rMatrix = dot(U, linalg.diagsvd(s, dim, len(V)))
+    rMatrix = np.dot(U, linalg.diagsvd(s, dim, len(V)))
+    breakpoint()
     print(rMatrix)
 
 
@@ -54,6 +56,7 @@ def svd_(M, k=3):
     sig = np.eye(k) * S[: k]  # 将奇异值向量的前k个奇异值转为对角矩阵
 
     # 前k个奇异值对应矩阵U的前k列,对应矩阵VT的前k行，可以结合下图观察
+
     new_matrix = np.dot(np.dot(U[:, :k], sig), VT[:k, :])
     print(new_matrix)
 
@@ -64,5 +67,5 @@ if __name__ == "__main__":
                   [33, 115, 42, 17, 83, 10],
                   [9, 12, 2, 27, 17, 3]])
     svd(M, 3, 1)
-    svd_(M, 3)
+    # svd_(M, 3)
     

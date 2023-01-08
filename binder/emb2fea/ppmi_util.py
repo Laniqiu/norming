@@ -9,33 +9,33 @@ from scipy.sparse.linalg import svds
 import numpy as np
 from tqdm import tqdm
 import torch
-import shutil
 
-from common.setup import logging, get_root
+from common.setup import logging, adr
 from common.io_utils import general_reader
 
 
-def svds_by_blocks(epth, out_dir, fpth, k=1000,
-                   ncols=352275, total=352278,
-                   using_torch=False):
+def svds_by_blocks(epth, out_dir, fpth, chunk=1000,
+                   ncols=352275, total=352278, k=300):
     """
 
     @param epth:
     @param out_dir:
     @param fpth:
-    @param k:
+    @param chunk:
     @param ncols: col of matrix
     @param vocab_size: row of matrix
     @param total:
     @return:
     """
 
-    n = {3000: 1277, 1000: 277, 2000: 277}.get(k, False)
+    n = {3000: 1277, 1000: 277, 2000: 277}.get(chunk, False)
     stpwords = [each.split("\t")[0] for each in general_reader(fpth)][:n]
 
-    logging.info("setting:\n\tk={}\n\tstopwords size:{}".format(k, n))
+    if not out_dir.exists():
+        out_dir.mkdir()
 
-    # device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    logging.info("setting:\n\tchunk={}\n\tstopwords size:"
+                 "{}\n\tk={}\n\tout_dir:{}".format(chunk, n, k, out_dir))
 
     lino, count = -1, 0
     data, row, col = [], [], []
@@ -54,22 +54,22 @@ def svds_by_blocks(epth, out_dir, fpth, k=1000,
                 logging.info("discarding word:{}".format(line[0]))
                 continue
 
-            if count == k:  # data存储0 ~ k-1共 k 行, 开始生成matrix
+            if count == chunk:  # data存储0 ~ k-1共 k 行, 开始生成matrix
                 logging.info("lino: {}".format(lino))
                 logging.info("generating matrix...")
-                # if using_torch:
-                #     mat = torch.sparse_csr_tensor(torch.tensor(row, dtype=torch.int64),
-                #                                   torch.tensor(col, dtype=torch.int64),
-                #                                   torch.tensor(data), dtype=torch.float
-                #                                   ).to(device)
-                #     u, s, vt = torch.svd_lowrank(mat, q=k-1)
-                # else:
-                mat = csr_matrix((data, (row, col)), shape=(k, ncols))
-                u, s, vt = svds(mat, k=k - 1)
+                mat = csr_matrix((data, (row, col)), shape=(chunk, ncols))
+                u, s, vt = svds(mat, k=k)
 
-                lazy_save(out_dir, "u", lino, u)
-                lazy_save(out_dir, "s", lino, s)
-                lazy_save(out_dir, "vt", lino, vt)
+
+                # u, s, vt 保存方式不同
+                lazy_save(out_dir, "vt", lino, csr_matrix(vt))
+                lazy_save(out_dir, "u", lino, csr_matrix(u))
+                # s全部保存
+                lazy_save(out_dir, "s", lino, csr_matrix(s))
+
+                del u
+                del s
+                del vt
 
                 data, row, col = [], [], []  # 记载当前行
                 count = 0
@@ -81,21 +81,21 @@ def svds_by_blocks(epth, out_dir, fpth, k=1000,
 
             count += 1
             lino += 1
-    logging.info("vocab size: {}".format(lino))
+        logging.info("vocab size: {}".format(lino))
 
 
 def lazy_save(out_dir, fname, lino, u):
-    that_fout = out_dir.joinpath("{}_{}.npz".format(fname, lino - 1000))
-    this_fout = out_dir.joinpath("{}_{}".format(fname, lino))
+    """
+    @param out_dir:
+    @param fname:
+    @param lino:
+    @param u:
+    @return:
+    """
 
-    if that_fout.exists():  # 若上一个存在，则和之前的合并保存，然后删除原来的
-        this_u = vstack((load_npz(that_fout), u))
-        logging.info("saving stacked matrix ...")
-        save_npz(this_fout, this_u)
-        that_fout.unlink(missing_ok=True)
-    else:
-        logging.info("saving new matrix...")
-        save_npz(this_fout, u)
+    this_fout = out_dir.joinpath("{}_{}".format(fname, lino))
+    logging.info("saving new matrix at {} ...".format(this_fout))
+    save_npz(this_fout, u)
 
 
 def process_line(count, line):
@@ -129,12 +129,11 @@ def save_mat(out_dir, fname, lino, smat, torch_save=False):
 
 if __name__ == "__main__":
     from pathlib import Path
-    _root = Path(get_root()).joinpath("dough")
+    _root = Path(adr).joinpath("dough")
 
     svds_by_blocks(_root.joinpath("embeddings/ppmi.wiki.word"),
-                  # _root.joinpath("ttmp")
-                   Path("/content/tmp"),  # 保存路径
+                   _root.joinpath("tmp"),  # 保存路径
+                   # Path("/content/tmp"),  # 保存路径
                    _root.joinpath("ppmi/filter_1277.txt"),  # 过滤词的路径
-                   k=3000,
-                   using_torch=False
-                  )
+                   chunk=1000
+                   )
