@@ -18,9 +18,9 @@ FILE_LEVEL = 20
 LOG_IN_CONSOLE = True
 LOG_IN_FILE = True
 
-PLAIN_FMT = "%(asctime)s-%(levelname)s-%(filename)s-%(lineno)s: %(message)s"
+PLAIN_FMT = "%(asctime)s-%(levelname)s-%(filename)s-%(lineno)s > %(message)s"
 COLOR_FMT = "%(log_color)s%(asctime)s-%(level_log_color)s%(levelname)s%(reset)s" \
-      "%(log_color)s-%(filename)s-%(lineno)s: %(message)s"
+      "%(log_color)s-%(filename)s-%(lineno)s > %(message)s"
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 LOG_COLORS = {

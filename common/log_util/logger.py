@@ -4,6 +4,7 @@
 @time: 1/1/2023 9:51 am
 """
 import logging
+import os.path
 from logging.handlers import TimedRotatingFileHandler
 import threading
 from colorlog import ColoredFormatter
@@ -13,10 +14,10 @@ from .log_config import *
 
 class MyLogger(object):
 
-    def __int__(self):
+    def __int__(self, _root):
         pass
 
-    def __new__(cls):
+    def __new__(cls, _root):
         mutex = threading.Lock()
         mutex.acquire()  # 上锁，防止多线程下出问题
         if not hasattr(cls, 'instance'):
@@ -25,7 +26,7 @@ class MyLogger(object):
 
             if LOG_IN_FILE and not cls.instance.log_filename:
                 # 日志存放路径
-                cls.instance.log_filename = '../logs/log.log'
+                cls.instance.log_filename = os.path.join(_root, "pies/logs/log.log")
 
             cls.instance.logger = logging.getLogger(LOGGER_NAME)
             cls.instance.__config_logger()
@@ -59,8 +60,6 @@ class MyLogger(object):
             rt_file_handler.setFormatter(plain_formatter)
             rt_file_handler.setLevel(FILE_LEVEL)
             self.logger.addHandler(rt_file_handler)
-
-
 
 
 

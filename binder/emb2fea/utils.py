@@ -10,6 +10,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import explained_variance_score
 from sklearn.metrics import r2_score
 
+from common import logging
+
 
 def load_data(fname, irow=5, icol=11, ecol=79, chinese=True):
     """
@@ -205,6 +207,39 @@ def return_wf_spearman(Y_test, Y_pred):
     return np.array(sp_f, dtype=float), np.array(sp_w, dtype=float)
 
 
+def check_spr(files, fout):
+    # regressors
+    rdict = {"0": "Linear", "1": "Lasso",
+             "2": "Ridge", "3": "RandomForest", "4": "MLP"}
+
+    # indexes = ["cc.zh.300.vec", "sgns.wiki.word", "wiki.zh.aligh.vec", "wiki.zh.vec"] * len(rdict)
+
+    outt = []
+    for this_file in files:
+        logging.info("loading from {}".format(this_file.name))
+        vec, reg, _, st = this_file.stem.split("_")
+        this_data = np.load(this_file)  # spearman on features
+
+        that_file = this_file.parent.joinpath(this_file.name.replace("_fea.npy", "_word.npy"))
+        logging.info("loading from {}".format(that_file.name))
+        that_data = np.load(that_file)  # spearman on words
+
+        row = {"Model": this_file.name.split("_", 1)[0],
+               "Regressor": rdict[reg],
+               "Word Correlation": np.round(that_data.mean(), decimals=4),
+               "Feature Correlation": np.round(this_data.mean(), decimals=4)}
+
+        outt.append(row)
+    df = pd.DataFrame(outt)
+    df.to_csv(fout, sep="\t")
+
+
+if __name__ == "__main__":
+    from pathlib import Path
+    fpth = "/Users/laniqiu/My Drive/dough/sps"
+    fout = "/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/assignments/binder/" \
+           "spearman_lasso_only.txt"
+    files = sorted(Path(fpth).glob("*_fea.npy"))
 
 
 

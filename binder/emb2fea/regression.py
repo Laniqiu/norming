@@ -32,10 +32,12 @@ def main(fpth, efolder):
         if epth.suffix not in emb_sufix:  # in case hidden files exist
             continue
 
-        logging.info("skip ppmi ...")
-        if epth.name in ["ppmi.wiki.word"]:  # todo 先跳过ppmi
+        logging.info("ppmi only ...")
+        if epth.name not in ["ppmi.wiki.word"]:  # todo 先跳过ppmi
             continue
         logging.info("load embeddings from {} ...".format(epth.name))
+
+
         vectors, dim = load_embeddings(epth, _data)
         X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
 
@@ -99,12 +101,11 @@ if __name__ == '__main__':
     # efolder = _path.joinpath("norming/embeddings/")  # emb folders
     efolder = Path("/content/dough/embeddings")
     logging.info("Initialize regressors ... ")
-    # regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
-    #               RandomForestRegressor(n_estimators=10),
-    #               MLPRegressor(hidden_layer_sizes=(50, 10),
-    #                            activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
-    logging.info("Only train on Lasso ...")
-    regressors = [Lasso()]
+    regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
+                  RandomForestRegressor(n_estimators=10),
+                  MLPRegressor(hidden_layer_sizes=(50, 10),
+                               activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
+
 
     main(fpth, efolder)
 

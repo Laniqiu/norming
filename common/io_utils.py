@@ -14,10 +14,22 @@ def general_reader(fpth, encoding="utf-8", mode="r"):
     :return:
     """
 
-    with codecs.open(fpth, mode=mode) as fr:
+    with codecs.open(fpth, encoding=encoding, mode=mode) as fr:
         data = fr.readlines()
 
     return data
+
+
+def general_writer(data, fout, encoding="utf-8", mode="w"):
+    """
+    @param data: data to write
+    @param fout: save pth
+    @param encoding:
+    @param mode:
+    @return:
+    """
+    with open(fout, encoding=encoding, mode=mode) as fw:
+        fw.writelines(data)
 
 def load_json(fpth, mode="r"):
     import json
