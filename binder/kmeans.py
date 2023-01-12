@@ -4,21 +4,12 @@ to see if the clusters reflect the word category structure (see also Binder et a
 
 notes: on hsu's data
 """
-import logging
 from sklearn.cluster import KMeans
 import pandas as pd
 import numpy as np
 from collections import OrderedDict
 
-
-try:
-    from google.colab import drive
-    _root = "/content/drive/MyDrive/"
-except:
-    _root = "/Users/laniqiu/My Drive/"
-
-LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+from common.setup import logging, adr
 
 
 def main(fpth, fout, minr=20, maxr=31, chinese=True):
@@ -71,9 +62,8 @@ def load_data(fpth, chinese=True):
 
 if __name__ == '__main__':
     from pathlib import Path
-    _path = Path(_root).joinpath("dough")
+    _path = Path(adr).joinpath("dough")
     fpth = _path.joinpath("WordSet1_Ratings.xlsx")
-
     fout = _path.joinpath("kmeans_hsu.xlsx")
 
     main(fpth, fout, chinese=True)

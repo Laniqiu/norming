@@ -6,6 +6,7 @@
 """
 from scipy.sparse import csr_matrix, vstack, save_npz, load_npz, hstack
 from scipy.sparse.linalg import svds
+from scipy import linalg
 import numpy as np
 from tqdm import tqdm
 
@@ -77,6 +78,7 @@ def mat2values(data, row, col, words, fout, chunk, k, ncols):
     row.clear()
     col.clear()
 
+
 def process_line(count, line):
     this_data, this_row, this_col = [], [], []
     for each in line[1:]:
@@ -90,13 +92,62 @@ def process_line(count, line):
     return this_data, this_row, this_col
 
 
+def sim_test(mpth, test_words, topn=10, total=352277):
+    """
+    test embedding via cos sim
+    @param mpth:
+    @return:
+    """
+    from sklearn.metrics.pairwise import cosine_similarity
+    from pprint import pprint
+
+    psbar = tqdm(total=total)
+    def get_vecs():
+        vecs = {}
+        with open(mpth, "r") as fr:
+            psbar.update(1)
+            for line in fr:
+                line = line.strip().split()
+                if len(vecs) == len(test_words):
+                    return vecs
+                if line[0] in test_words:
+                    vecs[line[0]] = np.array([float(i) for i in line[1:]]).reshape(1, -1)
+        return vecs
+
+    vecs = get_vecs()
+    show = []
+    for w, this_vec in vecs.items():
+        for that_w, that_vec in vecs.items():
+            if that_w == w:
+                continue
+            s_ = cosine_similarity(that_vec, this_vec)[0][0]
+            show.append((w, that_w, s_))
+    pprint(show)
+    # with open(mpth, "r") as fr:
+    #     for line in fr:
+    #         psbar.update(1)
+    #         line = line.strip().split()
+    #         that_vec = np.array([float(i) for i in line[1:]]).reshape(1, -1)
+    #         sim = cosine_similarity(that_vec, this_vec)[0][0]
+    #         score.append((line[0], sim))
+    #         if len(score) > topn:  #
+    #             score.sort(key=lambda x: x[1], reverse=False)  # 从大到小
+    #             score = score[:topn]
+    # pprint(score)
+
+
+
+
 if __name__ == "__main__":
     from pathlib import Path
 
     _root = Path(adr).joinpath("dough")
 
-    bsvds(_root.joinpath("embeddings/ppmi.wiki.word"),
-          # _root.joinpath("tmp"),  # 保存路径
-          _root.joinpath("ppmi/rebuild.ppmi.wiki.word"),
-          chunk=1000
-          )
+    # bsvds(_root.joinpath("embeddings/ppmi.wiki.word"),
+    #       # _root.joinpath("tmp"),  # 保存路径
+    #       _root.joinpath("ppmi/rebuild.ppmi.wiki.word"),
+    #       chunk=1000
+    #       )
+
+    sim_test(_root.joinpath("ppmi/rebuild.ppmi.wiki.word"), ["乳白色", "灰白色", "银白色", "黄白色", "白色"])
+

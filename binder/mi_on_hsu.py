@@ -1,6 +1,6 @@
 
 import pandas as pd
-from common import logging
+from common.setup import logging
 
 from mi import cal_pairwise_mi, cal_bt_attrs, \
     generate_heatmap, visualize_for_me

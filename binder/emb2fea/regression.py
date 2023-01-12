@@ -11,9 +11,6 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import LeaveOneOut
 import numpy as np
 
-import utils
-from imp import reload
-reload(utils)
 from utils import *
 from common.setup import logging, adr
 
@@ -25,18 +22,17 @@ def main(fpth, efolder):
     @return:
     """
     logging.info("load data from {} ...".format(fpth.name))
-    _data = load_data(fpth)  # todo 测试, 后面需要修改
+    _data = load_data(fpth)
 
     loo = LeaveOneOut()
     for epth in efolder.glob("*"):
         if epth.suffix not in emb_sufix:  # in case hidden files exist
             continue
 
-        logging.info("ppmi only ...")
-        if epth.name not in ["ppmi.wiki.word"]:  # todo 先跳过ppmi
+        logging.info("test on ppmi only ...")
+        if epth.name not in ["rebuild.ppmi.wiki.word"]:
             continue
         logging.info("load embeddings from {} ...".format(epth.name))
-
 
         vectors, dim = load_embeddings(epth, _data)
         X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
@@ -81,31 +77,58 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name):
     # compute spearman across words & features??
     sp_f, sp_w = return_wf_spearman(Y_gold, Y_output)
     # save sp scores
-    logging.info("save spearman scores ...")
+    logging.info("saving spearman scores ...")
     fout, wout = out_dir.joinpath("{}_{}_sp_fea.npy".format(emb_name, reg_no)), \
         out_dir.joinpath("{}_{}_sp_word.npy".format(emb_name, reg_no))
     np.save(fout, sp_f)
     np.save(wout, sp_w)
 
+def check_spr(files, fout, that_name, this_name):
+    # regressors
+    rdict = {"0": "Linear", "1": "Lasso",
+             "2": "Ridge", "3": "RandomForest", "4": "MLP"}
+
+    # indexes = ["cc.zh.300.vec", "sgns.wiki.word", "wiki.zh.aligh.vec", "wiki.zh.vec"] * len(rdict)
+
+    outt = []
+    for this_file in sorted(files):
+        logging.info("loading from {}".format(this_file.name))
+        vec, reg, _, st = this_file.stem.split("_")
+        this_data = np.load(this_file)  # spearman on features
+
+        that_file = this_file.parent.joinpath(this_file.name.replace(that_name, this_name))
+        logging.info("loading from {}".format(that_file.name))
+        that_data = np.load(that_file)  # spearman on words
+
+        row = {"Model": this_file.name.split("_", 1)[0],
+               "Regressor": rdict[reg],
+               "Word Correlation": np.round(that_data.mean(), decimals=4),
+               "Feature Correlation": np.round(this_data.mean(), decimals=4)}
+
+        outt.append(row)
+    df = pd.DataFrame(outt)
+    df.to_csv(fout, sep="\t")
+
 
 if __name__ == '__main__':
-    _root = adr
     from pathlib import Path
-    _path = Path(_root).joinpath("dough")
+    _path = Path(adr).joinpath("dough")
 
     fpth = _path.joinpath("Copy of meanRating_July1.xlsx")
     out_dir = _path.joinpath("sps")
     if not out_dir.exists():
         out_dir.mkdir()
-    emb_sufix = [".vec", ".word"]
-    # efolder = _path.joinpath("norming/embeddings/")  # emb folders
-    efolder = Path("/content/dough/embeddings")
-    logging.info("Initialize regressors ... ")
-    regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
-                  RandomForestRegressor(n_estimators=10),
-                  MLPRegressor(hidden_layer_sizes=(50, 10),
-                               activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
-
-
-    main(fpth, efolder)
+    # emb_sufix = [".vec", ".word"]
+    # # efolder = _path.joinpath("norming/embeddings/")  # emb folders
+    # efolder = _path.joinpath("ppmi")
+    # logging.info("Initialize regressors ... ")
+    # regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
+    #               RandomForestRegressor(n_estimators=10),
+    #               MLPRegressor(hidden_layer_sizes=(50, 10),
+    #                            activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
+    #
+    # main(fpth, efolder)
+    check_spr(out_dir.glob("*_fea.npy"),
+              out_dir.joinpath("ppmi_spr.txt"),
+              "_fea.npy", "_word.npy")
 
