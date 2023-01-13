@@ -2,8 +2,10 @@
 
 """
 commonly used functions: write, read, etc.
+读写
 """
 import codecs
+
 
 
 def general_reader(fpth, encoding="utf-8", mode="r"):

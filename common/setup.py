@@ -5,15 +5,19 @@
 
 """
 
+from pathlib import Path
 
 try:
     from google.colab import drive
-    adr = "/content/drive/MyDrive/"
+    adr = Path("/content/drive/MyDrive/")
+    tmp_dir = Path("/content/tmp")
 except:
-    adr = "/Users/laniqiu/My Drive"
+    adr = Path("/Users/laniqiu/My Drive")
+    tmp_dir = Path("/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity")
 
 
 from .log_util import MyLogger
 logging = MyLogger(adr).get_logger()
-logging.info("\nThis is Lani's Little Bakery\nAddress: {}".format(adr))
+logging.info("\n\tHome Address: {}\n\tTemp Address: {}".format(adr, tmp_dir))
+
 
