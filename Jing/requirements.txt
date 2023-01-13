@@ -39,7 +39,7 @@
 #cmake==3.22.6
 #cmdstanpy==1.0.8
 #colorcet==3.0.1
-#colorlog==6.7.0
+colorlog==6.7.0
 #colorlover==0.3.0
 #community==1.0.0b1
 #confection==0.0.3

@@ -6,20 +6,32 @@
 """
 import pandas as pd
 import re
+from subprocess import check_call
+
+
+from imp import reload
+import utils
+reload(utils)
 
 from common.setup import logging, adr, tmp_dir
 from utils import load_models, collect_embs, save_vecs
 
 
-def main(fin, out_dir, model, tokenizer, sheet=1):
 
+def main(fin, out_dir, model_path, sheet=1):
     """
     对target word的每一个sense取平均word emb
     @param fin:
+    @param out_dir:
+    @param model_path:
     @param sheet:
+    @param temp_dir:
     @return:
     """
+    logging.info("loading models from {}".format(model_path))
+    model, tokenizer = load_models(model_path)
 
+    logging.info("loading data from {}".format(fin))
     raw_data = pd.read_excel(fin, sheet_name=sheet)
     targets, senses, sentences = raw_data.targets, raw_data.senses, raw_data.sentences
     assert senses.any()  # senses不可以存在nan值
@@ -33,23 +45,25 @@ def main(fin, out_dir, model, tokenizer, sheet=1):
         if not sents:
             logging.warning("\nNo sentences found:\n\ttarget: {}\n\tsense:{}\n".format(tgt, senses[_]))
             continue
-
-        fname = senses[_].split(".")[0]
-        fout = out_dir.joinpath(tgt, f"{fname}")
-        out_dir.joinpath(tgt).mkdir(parents=True, exist_ok=True)
-        sense_vec = collect_embs(tgt, sents, model, tokenizer).mean(axis=0).unsqueeze(0)
+        fname = senses[_].split(".")[0]  # 当前意义名称
+        fout = temp_dir.joinpath(tgt, f"{fname}")
+        temp_dir.joinpath(tgt).mkdir(parents=True, exist_ok=True)
+        sents_vec = collect_embs(tgt, sents, model, tokenizer)
+        sense_vec = sents_vec.mean(axis=0).unsqueeze(0)
         save_vecs(sense_vec, fout)
-        logging.info(f"average word embedding save at {fout}")
+        logging.info(f"temporarily saving at {fout}")
+
 
 
 if __name__ == "__main__":
-    fin = adr.joinpath("Jing/evaluation-target-candidates.xlsx")  # 输入数据
-    out_dir = adr.joinpath("svectors")  # 最终保存路径
-
     model_version = "chinese-roberta-wwm-ext"
     model_path = tmp_dir.joinpath(model_version)
-    model, tokenizer = load_models(model_path)
 
-    main(fin, out_dir, model, tokenizer)
+    temp_dir = tmp_dir.joinpath("svecs")  # 临时数据保存路径
+
+    main(adr.joinpath("Jing/evaluation-target-candidates.xlsx"),  # 输入数据
+         adr.joinpath("Jing"),   # 输出最终保存路径
+         model_path,  # 模型路径
+         )
 
 

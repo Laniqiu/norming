@@ -8,7 +8,6 @@ import torch
 from transformers import BertTokenizer, BertModel
 from sklearn.metrics.pairwise import cosine_similarity as cos
 
-from common.setup import adr, logging
 
 def load_models(model_path):
     """
@@ -17,8 +16,6 @@ def load_models(model_path):
     @param tokenizer_name:
     @return:
     """
-    logging.info("loading models from {}".format(model_path))
-
     tokenizer = BertTokenizer.from_pretrained(model_path)  # 加载base模型的对应的切词器
     model = BertModel.from_pretrained(model_path)
     return model, tokenizer

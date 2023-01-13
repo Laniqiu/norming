@@ -157,3 +157,264 @@
 2023-01-13 02:53:00-INFO-extract_diachronic_emb.py-65 > temporarily saving embeddings at /content/tmp/内伤/1961
 2023-01-13 02:53:01-INFO-extract_diachronic_emb.py-65 > temporarily saving embeddings at /content/tmp/内伤/1962
 2023-01-13 02:53:04-INFO-extract_diachronic_emb.py-65 > temporarily saving embeddings at /content/tmp/内伤/1965
+2023-01-13 04:12:56-INFO-setup.py-21 > 
+	Home Address: /content/drive/MyDrive
+	Temp Address: /content/tmp
+2023-01-13 04:13:08-INFO-utils.py-20 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 04:14:09-INFO-extract_sense_emb.py-41 > average word embedding save at /content/drive/MyDrive/Jing/svectors/软/1
+2023-01-13 04:15:08-INFO-utils.py-20 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 04:25:28-INFO-extract_sense_emb.py-59 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 04:25:33-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/1
+2023-01-13 04:25:34-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/2
+2023-01-13 04:25:34-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/3
+2023-01-13 04:25:35-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/4
+2023-01-13 04:25:36-WARNING-extract_sense_emb.py-38 > 
+No sentences found:
+	target: 软
+	sense:5. 能力弱，质量差： 功夫软；货色软
+
+2023-01-13 04:25:36-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/6
+2023-01-13 04:25:36-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/7
+2023-01-13 04:25:38-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/软/8
+2023-01-13 04:25:38-WARNING-extract_sense_emb.py-38 > 
+No sentences found:
+	target: 软
+	sense:9. 姓
+
+2023-01-13 04:25:40-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/病毒/1
+2023-01-13 04:25:42-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/病毒/2
+2023-01-13 04:25:42-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/出台/1
+2023-01-13 04:25:42-WARNING-extract_sense_emb.py-38 > 
+No sentences found:
+	target: 出台
+	sense:2. 比喻公开出面活动：出台干涉
+
+2023-01-13 04:25:44-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/出台/3
+2023-01-13 04:25:46-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/下海/1
+2023-01-13 04:25:48-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/下海/2
+2023-01-13 04:25:50-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/下海/3
+2023-01-13 04:25:51-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/下海/4
+2023-01-13 04:25:53-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/下海/5
+2023-01-13 04:25:55-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/出血/1
+2023-01-13 04:25:56-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/出血/2
+2023-01-13 04:25:58-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/滑坡/1
+2023-01-13 04:26:00-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/滑坡/2
+2023-01-13 04:26:02-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/刹车/1
+2023-01-13 04:26:03-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/刹车/2
+2023-01-13 04:26:05-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/刹车/3
+2023-01-13 04:26:06-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/联姻/1
+2023-01-13 04:26:08-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/联姻/2
+2023-01-13 04:26:09-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/宏观/1
+2023-01-13 04:26:10-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/宏观/2
+2023-01-13 04:26:10-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/反馈/1
+2023-01-13 04:26:10-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/反馈/2
+2023-01-13 04:26:12-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/反馈/3
+2023-01-13 04:26:14-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/载体/1
+2023-01-13 04:26:16-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/载体/2
+2023-01-13 04:26:18-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/遥控/1
+2023-01-13 04:26:19-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/遥控/2
+2023-01-13 04:26:21-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/输血/1
+2023-01-13 04:26:23-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/输血/2
+2023-01-13 04:26:25-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/消化/1
+2023-01-13 04:26:27-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/消化/2
+2023-01-13 04:26:29-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/消化/3
+2023-01-13 04:26:31-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/主旋律/1
+2023-01-13 04:26:33-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/主旋律/2
+2023-01-13 04:26:35-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/起步/1
+2023-01-13 04:26:36-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/起步/2
+2023-01-13 04:26:38-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/炒/1
+2023-01-13 04:26:40-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/炒/2
+2023-01-13 04:26:42-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/炒/3
+2023-01-13 04:26:43-INFO-extract_sense_emb.py-46 > temporarily saving at /content/tmp/炒/4
+2023-01-13 04:26:43-INFO-extract_sense_emb.py-49 > moving
+2023-01-13 04:28:30-INFO-extract_sense_emb.py-60 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 04:28:32-INFO-extract_sense_emb.py-49 > moving
+2023-01-13 04:31:34-INFO-extract_sense_emb.py-30 > loading data from /content/drive/MyDrive/Jing/evaluation-target-candidates.xlsx
+2023-01-13 04:31:34-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:34-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:35-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:36-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:37-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:38-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:39-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:40-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 04:31:40-INFO-extract_sense_emb.py-53 > moving
+2023-01-13 05:40:07-INFO-extract_sense_emb.py-29 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 05:40:09-INFO-extract_sense_emb.py-32 > loading data from /content/drive/MyDrive/Jing/evaluation-target-candidates.xlsx
+2023-01-13 05:40:54-INFO-extract_sense_emb.py-29 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 05:40:56-INFO-extract_sense_emb.py-32 > loading data from /content/drive/MyDrive/Jing/evaluation-target-candidates.xlsx
+2023-01-13 05:41:15-INFO-extract_sense_emb.py-29 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 05:41:16-INFO-extract_sense_emb.py-32 > loading data from /content/drive/MyDrive/Jing/evaluation-target-candidates.xlsx
+2023-01-13 05:43:51-INFO-extract_sense_emb.py-31 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 05:43:53-INFO-extract_sense_emb.py-34 > loading data from /content/drive/MyDrive/Jing/evaluation-target-candidates.xlsx
+2023-01-13 05:43:55-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/1
+2023-01-13 05:43:56-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/2
+2023-01-13 05:43:56-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/3
+2023-01-13 05:43:57-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/4
+2023-01-13 05:43:57-WARNING-extract_sense_emb.py-46 > 
+No sentences found:
+	target: 软
+	sense:5. 能力弱，质量差： 功夫软；货色软
+
+2023-01-13 05:43:58-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/6
+2023-01-13 05:43:58-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/7
+2023-01-13 05:44:00-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/8
+2023-01-13 05:44:00-WARNING-extract_sense_emb.py-46 > 
+No sentences found:
+	target: 软
+	sense:9. 姓
+
+2023-01-13 05:44:02-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/病毒/1
+2023-01-13 05:44:04-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/病毒/2
+2023-01-13 05:44:05-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出台/1
+2023-01-13 05:44:05-WARNING-extract_sense_emb.py-46 > 
+No sentences found:
+	target: 出台
+	sense:2. 比喻公开出面活动：出台干涉
+
+2023-01-13 05:44:06-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出台/3
+2023-01-13 05:44:08-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/1
+2023-01-13 05:44:10-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/2
+2023-01-13 05:44:12-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/3
+2023-01-13 05:44:13-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/4
+2023-01-13 05:44:15-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/5
+2023-01-13 05:44:17-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出血/1
+2023-01-13 05:44:19-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出血/2
+2023-01-13 05:44:21-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/滑坡/1
+2023-01-13 05:44:24-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/滑坡/2
+2023-01-13 05:44:26-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/刹车/1
+2023-01-13 05:44:28-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/刹车/2
+2023-01-13 05:44:30-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/刹车/3
+2023-01-13 05:44:31-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/联姻/1
+2023-01-13 05:44:33-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/联姻/2
+2023-01-13 05:44:34-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/宏观/1
+2023-01-13 05:44:35-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/宏观/2
+2023-01-13 05:44:35-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/反馈/1
+2023-01-13 05:44:36-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/反馈/2
+2023-01-13 05:44:38-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/反馈/3
+2023-01-13 05:44:39-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/载体/1
+2023-01-13 05:44:41-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/载体/2
+2023-01-13 05:44:43-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/遥控/1
+2023-01-13 05:44:45-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/遥控/2
+2023-01-13 05:44:47-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/输血/1
+2023-01-13 05:44:49-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/输血/2
+2023-01-13 05:44:51-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/消化/1
+2023-01-13 05:44:53-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/消化/2
+2023-01-13 05:44:55-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/消化/3
+2023-01-13 05:44:56-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/主旋律/1
+2023-01-13 05:44:58-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/主旋律/2
+2023-01-13 05:45:00-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/起步/1
+2023-01-13 05:45:02-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/起步/2
+2023-01-13 05:45:03-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/1
+2023-01-13 05:45:05-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/2
+2023-01-13 05:45:07-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/3
+2023-01-13 05:45:09-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/4
+2023-01-13 05:49:18-INFO-extract_sense_emb.py-56 > zipping
+2023-01-13 05:49:46-INFO-extract_sense_emb.py-56 > zipping
+2023-01-13 05:50:28-INFO-extract_sense_emb.py-56 > zipping
+2023-01-13 05:50:28-INFO-extract_sense_emb.py-59 > moving
+2023-01-13 05:54:37-INFO-extract_sense_emb.py-31 > loading models from /content/tmp/chinese-roberta-wwm-ext
+2023-01-13 05:54:39-INFO-extract_sense_emb.py-34 > loading data from /content/drive/MyDrive/Jing/evaluation-target-candidates.xlsx
+2023-01-13 05:54:41-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/1
+2023-01-13 05:54:41-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/2
+2023-01-13 05:54:42-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/3
+2023-01-13 05:54:42-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/4
+2023-01-13 05:54:42-WARNING-extract_sense_emb.py-46 > 
+No sentences found:
+	target: 软
+	sense:5. 能力弱，质量差： 功夫软；货色软
+
+2023-01-13 05:54:43-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/6
+2023-01-13 05:54:43-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/7
+2023-01-13 05:54:45-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/软/8
+2023-01-13 05:54:45-WARNING-extract_sense_emb.py-46 > 
+No sentences found:
+	target: 软
+	sense:9. 姓
+
+2023-01-13 05:54:47-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/病毒/1
+2023-01-13 05:54:49-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/病毒/2
+2023-01-13 05:54:50-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出台/1
+2023-01-13 05:54:50-WARNING-extract_sense_emb.py-46 > 
+No sentences found:
+	target: 出台
+	sense:2. 比喻公开出面活动：出台干涉
+
+2023-01-13 05:54:51-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出台/3
+2023-01-13 05:54:53-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/1
+2023-01-13 05:54:55-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/2
+2023-01-13 05:54:57-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/3
+2023-01-13 05:54:58-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/4
+2023-01-13 05:55:00-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/下海/5
+2023-01-13 05:55:02-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出血/1
+2023-01-13 05:55:03-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/出血/2
+2023-01-13 05:55:06-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/滑坡/1
+2023-01-13 05:55:07-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/滑坡/2
+2023-01-13 05:55:09-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/刹车/1
+2023-01-13 05:55:10-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/刹车/2
+2023-01-13 05:55:12-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/刹车/3
+2023-01-13 05:55:13-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/联姻/1
+2023-01-13 05:55:15-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/联姻/2
+2023-01-13 05:55:15-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/宏观/1
+2023-01-13 05:55:17-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/宏观/2
+2023-01-13 05:55:17-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/反馈/1
+2023-01-13 05:55:17-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/反馈/2
+2023-01-13 05:55:19-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/反馈/3
+2023-01-13 05:55:21-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/载体/1
+2023-01-13 05:55:23-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/载体/2
+2023-01-13 05:55:24-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/遥控/1
+2023-01-13 05:55:26-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/遥控/2
+2023-01-13 05:55:27-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/输血/1
+2023-01-13 05:55:29-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/输血/2
+2023-01-13 05:55:31-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/消化/1
+2023-01-13 05:55:33-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/消化/2
+2023-01-13 05:55:35-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/消化/3
+2023-01-13 05:55:37-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/主旋律/1
+2023-01-13 05:55:38-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/主旋律/2
+2023-01-13 05:55:40-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/起步/1
+2023-01-13 05:55:42-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/起步/2
+2023-01-13 05:55:43-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/1
+2023-01-13 05:55:45-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/2
+2023-01-13 05:55:47-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/3
+2023-01-13 05:55:49-INFO-extract_sense_emb.py-54 > temporarily saving at /content/tmp/svecs/炒/4
