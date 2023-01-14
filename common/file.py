@@ -16,11 +16,12 @@ def lazy_download(file):
     except:
         print("Oops!")
 
-def move_to(src, tgt):
+def move_log(cur_dir):
+    from shutil import move
     """
-    move src (file or folder) to target
-    @param src:
-    @param tgt:
-    @return:
+    
+    @param project: 
+    @return: 
     """
-    pass
+    move("../logs/log.log", "../../{}".format(cur_dir))
+

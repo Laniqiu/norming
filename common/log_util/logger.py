@@ -26,7 +26,7 @@ class MyLogger(object):
 
             if LOG_IN_FILE and not cls.instance.log_filename:
                 # 日志存放路径
-                cls.instance.log_filename = os.path.join(_root, "pies/logs/log.log")
+                cls.instance.log_filename = "../logs/log.log"
 
             cls.instance.logger = logging.getLogger(LOGGER_NAME)
             cls.instance.__config_logger()

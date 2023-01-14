@@ -74,7 +74,6 @@ def main(fdir, out_dir, model, tokenizer, dim=768):
 
 
 if __name__ == "__main__":
-
     model_version = "chinese-roberta-wwm-ext"
     model_path = tmp_dir.joinpath(model_version)
     logging.info("loading models from {}".format(model_path))
