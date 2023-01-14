@@ -7,7 +7,7 @@
 import torch
 from transformers import BertTokenizer, BertModel
 from sklearn.metrics.pairwise import cosine_similarity as cos
-
+import numpy as np
 
 def load_models(model_path):
     """
@@ -60,6 +60,10 @@ def collect_embs(tgt, sents, model, tokenizer, strategy="hstack"):
 def save_vecs(vec, fout):
     torch.save(vec, fout)
 
+def load_vecs(fin):
+    return torch.load(fin)
 
-def sim_report(m1, m2):
-    return cos(m1, m2)
+
+def sim_report(m1, m2, decimals=6):
+    score = cos(np.asarray(m1), np.asarray(m2))
+    return np.round(score, decimals=decimals)

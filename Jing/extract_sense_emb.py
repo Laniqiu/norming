@@ -6,8 +6,6 @@
 """
 import pandas as pd
 import re
-from subprocess import check_call
-
 
 from imp import reload
 import utils
@@ -15,7 +13,6 @@ reload(utils)
 
 from common.setup import logging, adr, tmp_dir
 from utils import load_models, collect_embs, save_vecs
-
 
 
 def main(fin, out_dir, model_path, sheet=1):
@@ -52,7 +49,6 @@ def main(fin, out_dir, model_path, sheet=1):
         sense_vec = sents_vec.mean(axis=0).unsqueeze(0)
         save_vecs(sense_vec, fout)
         logging.info(f"temporarily saving at {fout}")
-
 
 
 if __name__ == "__main__":
