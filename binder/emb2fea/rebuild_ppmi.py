@@ -123,19 +123,6 @@ def sim_test(mpth, test_words, topn=10, total=352277):
             s_ = cosine_similarity(that_vec, this_vec)[0][0]
             show.append((w, that_w, s_))
     pprint(show)
-    # with open(mpth, "r") as fr:
-    #     for line in fr:
-    #         psbar.update(1)
-    #         line = line.strip().split()
-    #         that_vec = np.array([float(i) for i in line[1:]]).reshape(1, -1)
-    #         sim = cosine_similarity(that_vec, this_vec)[0][0]
-    #         score.append((line[0], sim))
-    #         if len(score) > topn:  #
-    #             score.sort(key=lambda x: x[1], reverse=False)  # 从大到小
-    #             score = score[:topn]
-    # pprint(score)
-
-
 
 
 if __name__ == "__main__":

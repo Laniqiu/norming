@@ -4,9 +4,10 @@
 @time: 1/1/2023 8:02 pm
 logging 配置
 """
+import os
 
 LOGGER_NAME = "root"
-LOG_FILE = ""
+LOG_FILE = "../logs/log.log"
 # 设置
 MAX_BYTES = 512000
 BACKUP_COUNT = 10
@@ -16,7 +17,7 @@ BACKUP_COUNT = 10
 CONSOLE_LEVEL = 10
 FILE_LEVEL = 20
 LOG_IN_CONSOLE = True
-LOG_IN_FILE = True
+LOG_IN_FILE = eval(os.getenv("LOG_IN_FILE", "True"))
 
 PLAIN_FMT = "%(asctime)s-%(levelname)s-%(filename)s-%(lineno)s > %(message)s"
 COLOR_FMT = "%(log_color)s%(asctime)s-%(level_log_color)s%(levelname)s%(reset)s" \

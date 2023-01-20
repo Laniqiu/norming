@@ -12,12 +12,21 @@ try:
     adr = Path("/content/drive/MyDrive/")
     tmp_dir = Path("/content/tmp")
 except:
-    adr = Path("/Users/laniqiu/My Drive")
-    tmp_dir = Path("/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity")
+    adr = Path("/Users/laniqiu/Drive")
+    tmp_dir = Path("/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/tmp")
 
 
 from .log_util import MyLogger
-logging = MyLogger(adr).get_logger()
+logging = MyLogger().get_logger()
 logging.info("\n\tHome Address: {}\n\tTemp Address: {}".format(adr, tmp_dir))
 
 
+def move_log(cur_dir):
+    from shutil import move
+    import time
+    """
+    @param project: 
+    @return: 
+    """
+    name = time.strftime("%H:%M-%b-%d", time.localtime())
+    move("../logs/log.log", "../../{}/{}.log".format(cur_dir, name))

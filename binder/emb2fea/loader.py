@@ -1,19 +1,13 @@
 """
 utils
 """
-import heapq
 import numpy as np
 import pandas as pd
-from scipy.spatial.distance import cosine
 from scipy.stats import spearmanr
 from sklearn.metrics import mean_squared_error
-from sklearn.metrics import explained_variance_score
-from sklearn.metrics import r2_score
-
-from common.setup import logging
 
 
-def load_data(fname, irow=5, icol=11, ecol=79, chinese=True):
+def load_data(fname, irow=5, icol=11, ecol=79):
     """
 
     @param fname: 数据集文件名，xlsx
@@ -23,7 +17,7 @@ def load_data(fname, irow=5, icol=11, ecol=79, chinese=True):
     @param chinese: 是否为中文数据集
     @return:
     """
-    ds = {}
+    des = {}
     matrix = []
 
     df = pd.read_excel(fname)
@@ -31,14 +25,15 @@ def load_data(fname, irow=5, icol=11, ecol=79, chinese=True):
     # encoding is utf-8 when dealing with Chinese data
     for i in range(irow, len(df.words)):
         word = df.words[i]
-        ds[word] = i - irow
+        eword = df.EngWords[i]
+        des[(eword, word)] = i - irow
 
         vector = df.iloc[i].iloc[icol:ecol].values
         matrix.append(np.array(vector, dtype=float))
 
-    ds['_matrix_'] = np.around((np.array(matrix)), decimals=4)
+    des['_matrix_'] = np.around((np.array(matrix)), decimals=4)
 
-    return ds
+    return des
 
 
 def load_embeddings(fname, ds_words):
@@ -50,6 +45,9 @@ def load_embeddings(fname, ds_words):
     emb = {}
     matrix = []
     dims = 0
+    keys = [key for key in ds_words if key not in ['domains', '_matrix_']]
+    _, tgts = zip(*keys)
+
     with open(fname, 'r', encoding='utf-8', errors="ignore") as f:
         for line in f:
             line = line.strip().split()
@@ -60,7 +58,8 @@ def load_embeddings(fname, ds_words):
                     dims = len(line) - 1
 
             word = line[0]
-            if word not in ds_words:
+            # if word not in ds_words:
+            if word not in tgts:
                 continue
 
             if word in ['', ' ', '\t', '\n']:
@@ -124,18 +123,19 @@ def assign_emb_dataset(ds, ds_words, embs, dim, norm_dim=68):
     """
 
     words, X, Y = [], [], []
-    for i, word in enumerate(ds_words):
-        if word not in list(embs.keys()):
+    for i, key in enumerate(ds_words):
+        if key in ['domains', '_matrix_']:
+            continue
+        eword, word = key  # 英文词、中文词
+
+        if word not in embs:
             print('Word {} does not appear in embs'.format(word))
             continue
-        words.append(word)
 
-        # the second condition needs to be changed for predictions on Dutch norms
-        if word in ['domains', '_matrix_']:
-            continue
+        words.append(key)
 
         vec = get_vec(word, embs)
-        norm = get_vec(word, ds)
+        norm = get_vec(key, ds)
 
         if len(vec) != dim or len(norm) != norm_dim:
             continue
@@ -147,11 +147,11 @@ def assign_emb_dataset(ds, ds_words, embs, dim, norm_dim=68):
 
 
 def return_MSE_by_Feature(Y_test, Y_pred):
+    Y_pred, Y_test = np.asarray(Y_pred), np.asarray(Y_test)
     mse = mean_squared_error(Y_test, Y_pred, multioutput='raw_values')
     rmse = np.sqrt(mse)
 
     return mse, rmse
-
 
 def return_Spearman_simple(Y_test, Y_pred):
     spear_var = []
@@ -203,11 +203,7 @@ def return_wf_spearman(Y_test, Y_pred):
     for i in range(wn):
         var = spearmanr(Y_test[i], Y_pred[i])[0]
         sp_w.append(var)
-
     return np.array(sp_f, dtype=float), np.array(sp_w, dtype=float)
-
-
-
 
 
 if __name__ == "__main__":
