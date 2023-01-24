@@ -3,8 +3,6 @@ utils
 """
 import numpy as np
 import pandas as pd
-from scipy.stats import spearmanr
-from sklearn.metrics import mean_squared_error
 
 
 def load_data(fname, irow=5, icol=11, ecol=79):
@@ -144,66 +142,6 @@ def assign_emb_dataset(ds, ds_words, embs, dim, norm_dim=68):
         Y.append(norm)
     X, Y = np.array(X), np.array(Y)
     return X, Y, words
-
-
-def return_MSE_by_Feature(Y_test, Y_pred):
-    Y_pred, Y_test = np.asarray(Y_pred), np.asarray(Y_test)
-    mse = mean_squared_error(Y_test, Y_pred, multioutput='raw_values')
-    rmse = np.sqrt(mse)
-
-    return mse, rmse
-
-def return_Spearman_simple(Y_test, Y_pred):
-    spear_var = []
-    if np.asarray(Y_test).shape != np.asarray(Y_pred).shape:
-        assert False, "The size of the prediction array Y and of the test array Y are different."
-
-    Y_pred = np.array(Y_pred)
-    Y_test = np.array(Y_test)
-    for i in range(len(Y_test[0])):
-        var = spearmanr(Y_test[:, i], Y_pred[:, i])[0]
-        spear_var.append(var)
-
-    return np.array(spear_var, dtype=float)
-
-
-def spearman_cof(Y_test, Y_pred):
-    """
-    @param Y_test: np array
-    @param Y_pred: np array
-    @return:
-    """
-    spear_var = []
-    if np.asarray(Y_test).shape != np.asarray(Y_pred).shape:
-        assert False, "The size of the prediction array Y and of the test array Y are different."
-
-    Y_pred = np.array(Y_pred)
-    Y_test = np.array(Y_test)
-    for i in range(len(Y_test)):
-        var = spearmanr(Y_test[i], Y_pred[i])[0]
-        spear_var.append(var)
-
-    return np.array(spear_var, dtype=float)
-
-def return_wf_spearman(Y_test, Y_pred):
-    """
-
-    @return: spearman cof across words & features
-    """
-    sp_w, sp_f = [], []
-    Y_pred, Y_test = np.asarray(Y_pred), np.asarray(Y_test)
-    if Y_test.shape != Y_pred.shape:
-        assert False, "The size of the prediction array Y and of the test array Y are different."
-
-    wn, fn = Y_test.shape
-    for i in range(fn):
-        var = spearmanr(Y_test[:, i], Y_pred[:, i])[0]
-        sp_f.append(var)
-
-    for i in range(wn):
-        var = spearmanr(Y_test[i], Y_pred[i])[0]
-        sp_w.append(var)
-    return np.array(sp_f, dtype=float), np.array(sp_w, dtype=float)
 
 
 if __name__ == "__main__":

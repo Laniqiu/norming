@@ -90,6 +90,7 @@ if __name__ == '__main__':
     efolder = tmp_dir  # emb folders
     logging.info("Initialize regressors ... ")
     logging.info("ONLY Ridge & MLP...")
+
     # regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
     #               RandomForestRegressor(n_estimators=10),
     #               MLPRegressor(hidden_layer_sizes=(50, 10),

@@ -1,84 +1,118 @@
 # -*- coding: utf-8 -*-
 """
 @author: Lani QIU
-@time: 7/1/2023 7:38 pm
+@time: 20/1/2023 7:48 pm
+1. spearmanr score by word & by feature
+2. output top & bottom words in terms of MAE/ MSE
+3. spearmanr cor between MAE (or MSE) and freq
 """
 import numpy as np
 import pandas as pd
-from sklearn.metrics import mean_squared_error
+from scipy.stats import spearmanr
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-from common.io_utils import general_reader, general_writer
 from common.setup import *
+from common.io_utils import general_reader, general_writer
 
 
-def show_mse(fdir="binder/sps", out_name="spr_show.txt", pat="gold", ptt="predict", ):
+def spr_words_feas(Y_test, Y_pred):
     """
-    输出top 10和bottom 10 mse words
+    spearman cof across words & features
+    @param Y_test: array (n_samples, n_features)
+    @param Y_pred: array (n_samples, n_features)
     @return:
     """
-    _ddir = adr.joinpath(fdir)
-    words = general_reader(_ddir.joinpath("cc.zh.300_words.txt"))
-    words = [w.strip() for w in words if not w.startswith("_")]  # 过滤_matrix_
+    sp_w, sp_f = [], []
+    if Y_test.shape != Y_pred.shape:
+        assert False, "The size of the prediction array Y and of the test array Y are different."
 
-    fname = _ddir.parent.joinpath("Copy of meanRating_July1.xlsx")  # 原文件名
-    df = pd.read_excel(fname)
-    zipped = list(zip(df.EngWords, df.words))
-    ws = [(e, c) for e, c in zipped if c in words]
-    out = ["model\tregressor\ttop-10\tword\tscore\tbottom-10\tword\tscore\n"]
+    wn, fn = Y_test.shape
+    for i in range(fn):
+        var = spearmanr(Y_test[:, i], Y_pred[:, i])[0]
+        sp_f.append(var)
 
-    model = "cc.300"
-    for gold in _ddir.glob("*{}.npy".format(pat)):  # 匹配模式
-        print(gold)
-        tag, _ = gold.name.split("_")
-        pred = _ddir.joinpath(gold.name.replace(pat, ptt))
-        ga, pa = np.load(gold), np.load(pred)  # 原来保存的输出
-        scores = []
-        for i in range(ga.shape[0]):
-            mse = mean_squared_error(ga[i], pa[i], multioutput='raw_values')
-            scores.append(mse)
-        scores = np.array(scores).reshape(-1)
-        ss = np.argsort(scores)
-        tt = zip(ss[:10], ss[-10:][::-1])
-        for t, b in tt:
-            line = [model, tag, ws[t][0], ws[t][1], str(scores[t]), ws[b][0], ws[b][1], str(scores[b])]
-            out.append("\t".join(line) + "\n")
-    fout = _ddir.joinpath(out_name)
-    general_writer(out, fout)
+    for i in range(wn):
+        var = spearmanr(Y_test[i], Y_pred[i])[0]
+        sp_w.append(var)
+    return np.array(sp_f, dtype=float), np.array(sp_w, dtype=float)
 
 
-def mae_freq():
-    """
-    计算每个词的mae和freq之间的关系
-    @return:
-    """
-    pass
+def vis(arr, words, num):
+    ss = np.argsort(arr)
+    tt = zip(ss[:num], ss[-num:][::-1])
+    out = []
+    for i1, i2 in tt:
+        tw, bw = words[i1], words[i2]  # list类型
+        tp, bt = arr[i1], arr[i2]
+        ll = map(str, [tw[0], tw[1], tp, bw[0], bw[1], bt])
+        line = "\t".join(ll)
+        out.append(line)
+    return out
 
 
-def check_spr(files, fout, that_name, this_name, rdict):
-    outt = []
-    for this_file in sorted(files):
-        logging.info("loading from {}".format(this_file.name))
-        vec, reg, _, st = this_file.stem.split("_")
-        this_data = np.load(this_file)  # spearman on features
+def main():
+    # load saved in-vocabulary  words
+    words = [e.strip().split("\t") for e in general_reader(wpth)]
+    # load freq info
+    df = pd.read_excel(fpth)
+    fs = [f for _, f in enumerate(df["BCC(log10)"]) if [df["EngWords"][_], df["words"][_]] in words]
+    fs = np.array(fs, dtype=float)
+    out1 = ["Model\tRegressor\tWord Correlation\tFeature Correlation\tMAE-Freq\tMSE-Freq\n"]
+    out2 = ["Model\tRegressor\tTop(MAE)\t\t\tBottom(MAE)\t\t\tTop(MSE)\t\t\tBottom(MSE)\t\t\n"]
+    for gpth in sorted(pths):
+        # load saved output & gt
+        model, reg, _ = gpth.name.split("_")
+        ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
+        gt = np.load(gpth).squeeze()
+        pred = np.load(ppth).squeeze()
+        sp_f, sp_w = spr_words_feas(gt, pred)  # spearmanr by word & by fea
 
-        that_file = this_file.parent.joinpath(this_file.name.replace(that_name, this_name))
-        logging.info("loading from {}".format(that_file.name))
-        that_data = np.load(that_file)  # spearman on words
+        mae = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
+        mse = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
+        spr_a = spearmanr(mae, fs)[0]
+        spr_s = spearmanr(mse, fs)[0]
 
-        row = {"Model": this_file.name.split("_", 1)[0],
-               "Regressor": rdict[reg],
-               "Word Correlation": np.round(that_data.mean(), decimals=4),
-               "Feature Correlation": np.round(this_data.mean(), decimals=4)}
+        ll = map(str, [model, reg, sp_w.mean(), sp_f.mean(), spr_a, spr_s])
+        line = "\t".join(ll) + "\n"
+        out1.append(line)
 
-        outt.append(row)
-    df = pd.DataFrame(outt)
-    df.to_csv(fout, sep="\t")
+        va = vis(mae, words, num)
+        vs = vis(mse, words, num)
+        for idx, ach in enumerate(va):
+            sch = vs[idx]
+            out2.append("{}\t{}\t{}\t{}\n".format(model, reg, ach, sch))
+    fout1 = out_dir.joinpath("spearmanr1.txt")
+    fout2 = out_dir.joinpath("spearmanr2.txt")
+    general_writer(out1, fout1)
+    general_writer(out2, fout2)
 
-def spr_overall():
-    """
-    spearmanr correlation by words & by features
-    @return:
-    """
+
+if __name__ == '__main__':
+    _ddir = adr.joinpath("binder")
+
+    fpth = _ddir.joinpath("Copy of meanRating_July1.xlsx")
+    wpth = _ddir.joinpath("out4/cc.zh.300_words.txt")
+    gpat, ppat = "gold", "predict"
+    pths = _ddir.joinpath("out4").glob("*{}.npy".format(gpat))
+    out_dir = _ddir.joinpath("out4")
+
+    num = 20
+
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
