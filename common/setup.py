@@ -30,3 +30,8 @@ def move_log(cur_dir):
     """
     name = time.strftime("%H:%M-%b-%d", time.localtime())
     move("../logs/log.log", "../../{}/{}.log".format(cur_dir, name))
+
+
+def delete_log():
+    from os import remove
+    remove("../logs/log.log")

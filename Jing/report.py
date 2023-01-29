@@ -79,7 +79,8 @@ if __name__ == "__main__":
     logging.info("loading models from {}".format(model_path))
     model, tokenizer = load_models(model_path)
 
-    skip_folder = ["下海", "主旋律"]
+    # skip_folder = ["下海", "主旋律"]
+    skip_folder = []
 
     svec_dir = tmp_dir.joinpath("svecs")
 
