@@ -4,16 +4,20 @@
 @time: 7/1/2023 5:03 pm
 
 """
-
 from pathlib import Path
 
+# 数据路径
 try:
     from google.colab import drive
     adr = Path("/content/drive/MyDrive/")
     tmp_dir = Path("/content/tmp")
 except:
-    # adr = Path("/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/dough")
-    adr = Path("/disk/lani/dough/")
+    cur = Path.cwd()
+    if cur.home().match("/Users/laniqiu/"):
+        adr = Path("/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/dough")
+    else:
+        adr = Path("/disk/lani/dough/")
+
     tmp_dir = adr.joinpath("tmp")
 
 
