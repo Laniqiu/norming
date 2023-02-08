@@ -2,7 +2,7 @@
 import pandas as pd
 from common.setup import logging
 
-from mi_on_binder import cal_pairwise_mi, cal_bt_attrs, \
+from binder.utils.mi_on_binder import cal_pairwise_mi, cal_bt_attrs, \
     generate_heatmap, visualize_for_me
 
 
