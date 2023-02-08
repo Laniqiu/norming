@@ -10,20 +10,31 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import LeaveOneOut
 import numpy as np
-
-from imp import reload
-
-
-from loader import load_data, load_embeddings, assign_emb_dataset
-from common.setup import *
+from pathlib import Path
 
 
-def main(fpth, efolder):
+
+
+
+from .loader import load_data, load_embeddings, assign_emb_dataset
+from common.setup import logging
+
+
+regressors = ["Ridge()",
+              """MLPRegressor(hidden_layer_sizes=(50, 10), 
+              activation='identity', solver='adam', early_stopping=True, max_iter=1000)"""
+              ]
+
+def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"]):
     """
     @param fpth: data path
     @param efolder: folder of embeddings
     @return:
     """
+    out_dir = Path(out_dir)
+    if not out_dir.exists():
+        out_dir.mkdir()
+
     logging.info("load data from {} ...".format(fpth.name))
     _data = load_data(fpth)
 
@@ -47,10 +58,10 @@ def main(fpth, efolder):
         for ir, this_reg in enumerate(regressors):
             regressor = eval(this_reg)
             reg_name = this_reg.split("(")[0]
-            each_train(X, Y, loo, regressor, reg_name, epth.stem)
+            each_train(X, Y, loo, regressor, reg_name, epth.stem, out_dir)
 
 
-def each_train(X, Y, loo, regressor, reg_no, emb_name):
+def each_train(X, Y, loo, regressor, reg_no, emb_name, out_dir):
     """
     @param X: data
     @param Y: labels
@@ -78,28 +89,4 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name):
     oout = out_dir.joinpath("{}_{}_predict".format(emb_name, reg_no))
     np.save(gout, Y_gold)
     np.save(oout, Y_output)
-
-
-if __name__ == '__main__':
-    _path = adr.joinpath("binder")
-    fpth = _path.joinpath("Copy of meanRating_July1.xlsx")
-    out_dir = _path.joinpath("out4")
-    out_dir.mkdir()
-
-    emb_sufix = [".vec", ".word"]
-    efolder = tmp_dir  # emb folders
-    logging.info("Initialize regressors ... ")
-    logging.info("ONLY Ridge & MLP...")
-
-    # regressors = [LinearRegression(), Lasso(alpha=0.1), Ridge(),
-    #               RandomForestRegressor(n_estimators=10),
-    #               MLPRegressor(hidden_layer_sizes=(50, 10),
-    #                            activation='identity', solver='adam', early_stopping=True, max_iter=1000)]
-    regressors = ["Ridge()",
-                  """MLPRegressor(hidden_layer_sizes=(50, 10), 
-                  activation='identity', solver='adam', early_stopping=True, max_iter=1000)"""
-                  ]
-
-    main(fpth, efolder)
-
 

@@ -50,7 +50,13 @@ def vis(arr, words, num):
     return out
 
 
-def main():
+def main(fpth, in_dir, wpth, out_dir, gpat="gold", ppat="predict", num=20):
+    in_dir, out_dir = Path(in_dir), Path(out_dir)
+    if not out_dir.exists():
+        out_dir.mkdir()
+
+    pths = in_dir.glob("*{}.npy".format(gpat))
+
     # load saved in-vocabulary  words
     words = [e.strip().split("\t") for e in general_reader(wpth)]
     # load freq info
@@ -81,24 +87,25 @@ def main():
         for idx, ach in enumerate(va):
             sch = vs[idx]
             out2.append("{}\t{}\t{}\t{}\n".format(model, reg, ach, sch))
-    fout1 = out_dir.joinpath("spearmanr1.txt")
-    fout2 = out_dir.joinpath("spearmanr2.txt")
+    fout1 = out_dir.joinpath("cor_fea.txt")
+    fout2 = out_dir.joinpath("cor_freq.txt")
     general_writer(out1, fout1)
     general_writer(out2, fout2)
 
 
-if __name__ == '__main__':
-    _ddir = adr.joinpath("binder")
 
-    fpth = _ddir.joinpath("Copy of meanRating_July1.xlsx")
-    wpth = _ddir.joinpath("out4/cc.zh.300_words.txt")
-    gpat, ppat = "gold", "predict"
-    pths = _ddir.joinpath("out4").glob("*{}.npy".format(gpat))
-    out_dir = _ddir.joinpath("out4")
-
-    num = 20
-
-    main()
+# if __name__ == '__main__':
+#     _ddir = adr.joinpath("binder")
+#
+#     fpth = _ddir.joinpath("Copy of meanRating_July1.xlsx")
+#     wpth = _ddir.joinpath("out4/cc.zh.300_words.txt")
+#     gpat, ppat = "gold", "predict"
+#     pths = _ddir.joinpath("out4").glob("*{}.npy".format(gpat))
+#     out_dir = _ddir.joinpath("out4")
+#
+#     num = 20
+#
+#     main()
 
 
 
