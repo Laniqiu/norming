@@ -31,6 +31,8 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"]):
     @param efolder: folder of embeddings
     @return:
     """
+    fpth = Path(fpth)
+    efolder = Path(efolder)
     out_dir = Path(out_dir)
     if not out_dir.exists():
         out_dir.mkdir()

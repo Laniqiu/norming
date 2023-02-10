@@ -20,7 +20,7 @@ opt, args = parser.parse_args()
 
 def main(project, target_folder,
          run_file="run.py",
-         to_ignore=ignore_patterns("*.pyc", "otr*")):
+         to_ignore=ignore_patterns("*.pyc", "otr*", "*.ipynb_checkpoints", "*lani*")):
     """
     copy common folder, project folder and create log folder
     @param project:
@@ -58,10 +58,11 @@ def main(project, target_folder,
     # 修改log_cofig的LOG_FILE
     log_config = com_tgt.joinpath("log_util/log_config.py")
     new = []
+
     with open(log_config, "r", encoding="utf-8") as fr:
         for line in fr:
             if line.startswith("LOG_FILE"):
-                line.replace("../logs/log.log", "logs/log.log")
+                line = line.replace("../logs/log.log", "logs/log.log")
             new.append(line)
     with open(log_config, "w", encoding="utf-8") as fw:
         fw.writelines(new)
@@ -71,7 +72,8 @@ def main(project, target_folder,
     setup_tgt.unlink()
     setup = ["# -*- coding: utf-8 -*-\n",
            "from .log_util import MyLogger\n",
-           "logging = MyLogger().get_logger()\n"
+           "logging = MyLogger().get_logger()\n",
+           "adr = None\n"
              ]
     with open(setup_tgt, "w", encoding="utf-8") as fw:
         fw.writelines(setup)

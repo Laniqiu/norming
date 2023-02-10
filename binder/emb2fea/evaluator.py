@@ -71,7 +71,9 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
     df = pd.read_excel(fpth)
     out1 = ["Model\tRegressor\tWord Correlation\tFeature Correlation\tMAE-Freq\tMSE-Freq\n"]
     out2 = ["Model\tRegressor\tTop(MAE)\t\t\tBottom(MAE)\t\t\tTop(MSE)\t\t\tBottom(MSE)\t\t\n"]
+
     for gpth in sorted(pths):
+        logging.info("processing {}".format(gpth))
         # load saved output & gt
         model, reg, _ = gpth.name.split("_")  # language model, regressor
         ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
