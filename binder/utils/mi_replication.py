@@ -12,16 +12,8 @@ from pandas import Series, DataFrame
 from copy import deepcopy
 from itertools import combinations
 from collections import OrderedDict
-import logging
 
-try:
-    from google.colab import drive
-    _root = "/content/drive/MyDrive/"
-except:
-    _root = "/Users/laniqiu/My Drive/"
-
-LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+from common.setup import *
 
 
 def excel_to_df(fpth, tgt_st):
@@ -79,15 +71,21 @@ def cal_pairwise_mi(groups, grp_attr, attr_names, mis):
     return ga_scores
 
 
-def visualize_for_me(mis, attr_names, ga_scores, top=10, bottom=10):
+def visualize_for_me(mis, attr_names, ga_scores, fout, top=10, bottom=10):
     """
     personal visualization
     """
+    outt = []
     n = mis.shape[0]
     tgt_idx = [(i, j) for i in np.arange(n) for j in np.arange(i + 1, n)]  #
     scores = np.array([mis[idx] for idx in tgt_idx])  # 避免mis初始化的0的影响
-    print("mean: ", mis.mean())
-    print("max: ", mis.max())
+    out = "Mean: {}\n".format(mis.mean())
+    logging.info(out)
+    outt.append(out)
+    out = "Max: {}\n".format(mis.max())
+    logging.info(out)
+    outt.append(out)
+
     # print("pairwise mi reported in Binder et al's ")
     # print(np.where(mis == mis.max()))
     # print(mis[6, 18])
@@ -95,18 +93,29 @@ def visualize_for_me(mis, attr_names, ga_scores, top=10, bottom=10):
     # print(mis[32, 36])
     # print(mis[27, 28])
     # print(mis[46, 48])
-    print("the top {}:".format(top))
+    out = "The top {}:\n".format(top)
+    logging.info(out)
+    outt.append(out)
+
     aa = np.argsort(-scores)[:top]
     for i in range(top):
         idx = np.where(mis == scores[aa[i]])
-        print('{}-{}\t{}'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], scores[aa[i]]))
+        out = '\t{}-{}\t{}\n'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], scores[aa[i]])
+        logging.info(out)
+        outt.append(out)
 
-    print("the bottom {}:".format(bottom))
+    out = "The bottom {}:\n".format(bottom)
+    logging.info(out)
+    outt.append(out)
     bb = np.argsort(scores)[:bottom]
     for i in range(bottom):
         idx = np.where(mis == scores[bb[i]])
-        print('{}-{}\t{}'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], scores[bb[i]]))
+        out = '\t{}-{}\t{}\n'.format(attr_names[int(idx[0])], attr_names[int(idx[1])], scores[bb[i]])
+        logging.info(out)
+        outt.append(out)
 
+    with open(fout, "w") as fw:
+        fw.writelines(outt)
     # print("in-group pairwise mi")
     # for k, v in ga_scores.items():
     #     print('{}\t{}'.format(k, v))
@@ -164,3 +173,6 @@ def generate_heatmap(mis, n, headline, sort_head, spth):
     plt.savefig(spth)
     logging.info("save pic at %s" % spth)
     plt.show()
+
+
+

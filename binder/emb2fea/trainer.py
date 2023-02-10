@@ -15,6 +15,7 @@ from pathlib import Path
 
 
 
+
 from .loader import load_data, load_embeddings, assign_emb_dataset
 from common.setup import logging
 
@@ -30,6 +31,8 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"]):
     @param efolder: folder of embeddings
     @return:
     """
+    fpth = Path(fpth)
+    efolder = Path(efolder)
     out_dir = Path(out_dir)
     if not out_dir.exists():
         out_dir.mkdir()
@@ -55,6 +58,7 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"]):
 
         logging.info("number of splits {}".format(loo.get_n_splits(X)))
         for ir, this_reg in enumerate(regressors):
+            logging.info("Current regressor:{}".format(this_reg))
             regressor = eval(this_reg)
             reg_name = this_reg.split("(")[0]
             each_train(X, Y, loo, regressor, reg_name, epth.stem, out_dir)
@@ -88,6 +92,4 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name, out_dir):
     oout = out_dir.joinpath("{}_{}_predict".format(emb_name, reg_no))
     np.save(gout, Y_gold)
     np.save(oout, Y_output)
-
-
 

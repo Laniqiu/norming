@@ -8,15 +8,12 @@ from sklearn.cluster import KMeans
 import pandas as pd
 import numpy as np
 from collections import OrderedDict
-from pathlib import Path
 
-from common.setup import logging
+from common.setup import *
 
 
 def main(fpth, fout, minr=20, maxr=31, chinese=True):
-    fpth, fout = Path(fpth), Path(fout)
     cwords, ewords, ratings = load_data(fpth, chinese=chinese)
-
 
     outt = {}
     for n in range(minr, maxr):
@@ -62,3 +59,11 @@ def load_data(fpth, chinese=True):
         exit()
     return cwords, ewords, ratings
 
+
+if __name__ == '__main__':
+    from pathlib import Path
+    _path = Path(adr).joinpath("dough")
+    fpth = _path.joinpath("WordSet1_Ratings.xlsx")
+    fout = _path.joinpath("kmeans_hsu.xlsx")
+
+    main(fpth, fout, chinese=True)

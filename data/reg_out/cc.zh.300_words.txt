@@ -121,7 +121,7 @@ debate	辩论
 deceit	欺骗
 delivered	递送
 denial	否认
-desk	桌子
+desk	书桌
 destroyed	毁坏
 dictation	听写
 dinner	晚餐
@@ -183,7 +183,6 @@ flower	花
 flute	长笛
 folly	蠢事
 foot	脚
-football	足球
 forest	森林
 found	创立
 fountain	喷泉
@@ -285,7 +284,7 @@ majority	大众
 malice	恶意
 man	男子
 mandolin	曼陀林
-marched	游行
+marched	行进
 mayor	市长
 medicine	药品
 meeting	会议
@@ -363,7 +362,7 @@ ran	跑
 raspberry	覆盆子
 read	读
 reality	现实
-reporter	记者
+reporter	通讯员
 restaurant	餐厅
 ricochet	跳弹
 riot	暴动
@@ -376,7 +375,7 @@ rumor	谣言
 sailboat	帆船
 salmon	三文鱼
 sandpaper	砂纸
-satire	讽刺
+satire	讽刺文
 saw	看
 saxophone	萨克斯管
 school	学校
