@@ -50,28 +50,40 @@ def vis(arr, words, num):
     return out
 
 
-def main(fpth, in_dir, wpth, out_dir, gpat="gold", ppat="predict", num=20):
+def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
+    """
+
+    @param fpth: path to the ratings
+    @param in_dir:
+    @param out_dir: output dir
+    @param gpat:
+    @param ppat:
+    @param num: visualize the top(bottom) num
+    @return:
+    """
+
     in_dir, out_dir = Path(in_dir), Path(out_dir)
     if not out_dir.exists():
         out_dir.mkdir()
 
     pths = in_dir.glob("*{}.npy".format(gpat))
 
-    # load saved in-vocabulary  words
-    words = [e.strip().split("\t") for e in general_reader(wpth)]
-    # load freq info
     df = pd.read_excel(fpth)
-    fs = [f for _, f in enumerate(df["BCC(log10)"]) if [df["EngWords"][_], df["words"][_]] in words]
-    fs = np.array(fs, dtype=float)
     out1 = ["Model\tRegressor\tWord Correlation\tFeature Correlation\tMAE-Freq\tMSE-Freq\n"]
     out2 = ["Model\tRegressor\tTop(MAE)\t\t\tBottom(MAE)\t\t\tTop(MSE)\t\t\tBottom(MSE)\t\t\n"]
     for gpth in sorted(pths):
         # load saved output & gt
-        model, reg, _ = gpth.name.split("_")
+        model, reg, _ = gpth.name.split("_")  # language model, regressor
         ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
         gt = np.load(gpth).squeeze()
         pred = np.load(ppth).squeeze()
         sp_f, sp_w = spr_words_feas(gt, pred)  # spearmanr by word & by fea
+
+        # load freq info
+        wpth = out_dir.joinpath("{}_words.txt".format(model))
+        words = [e.strip().split("\t") for e in general_reader(wpth)]
+        fs = [f for _, f in enumerate(df["BCC(log10)"]) if [df["EngWords"][_], df["words"][_]] in words]  # freq
+        fs = np.array(fs, dtype=float)
 
         mae = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
         mse = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
