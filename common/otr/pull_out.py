@@ -80,8 +80,14 @@ def main(project, target_folder,
     run_src = target_pro.joinpath(run_file)
     run_tgt = target_dir.joinpath(run_file)
 
-    if run_src in target_pro.iterdir():
+    if run_src.exists():
         move(run_src, run_tgt)
+
+    # 移动requirements.txt
+    req_file = target_pro.joinpath("requirements.txt")
+    req_tgt = target_dir.joinpath("requirements.txt")
+    if req_file.exists():
+        move(req_file, req_tgt)
 
 
 main(opt.project, opt.target)
