@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 from collections import OrderedDict
 
-from common.setup import logging, adr
+from common.setup import *
 
 
 def main(fpth, fout, minr=20, maxr=31, chinese=True):

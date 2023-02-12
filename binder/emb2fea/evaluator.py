@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from pathlib import Path
 
 from common.setup import *
 from common.io_utils import general_reader, general_writer
@@ -73,7 +74,7 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
     out2 = ["Model\tRegressor\tTop(MAE)\t\t\tBottom(MAE)\t\t\tTop(MSE)\t\t\tBottom(MSE)\t\t\n"]
 
     for gpth in sorted(pths):
-        logging.info("processing {}".format(gpth))
+        logging.info("Processing {}".format(gpth))
         # load saved output & gt
         model, reg, _ = gpth.name.split("_")  # language model, regressor
         ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
@@ -82,7 +83,7 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         sp_f, sp_w = spr_words_feas(gt, pred)  # spearmanr by word & by fea
 
         # load freq info
-        wpth = out_dir.joinpath("{}_words.txt".format(model))
+        wpth = in_dir.joinpath("{}_words.txt".format(model))
         words = [e.strip().split("\t") for e in general_reader(wpth)]
         fs = [f for _, f in enumerate(df["BCC(log10)"]) if [df["EngWords"][_], df["words"][_]] in words]  # freq
         fs = np.array(fs, dtype=float)

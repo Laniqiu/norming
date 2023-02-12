@@ -13,8 +13,8 @@ from binder.emb2fea.evaluator import main as evaluate
 fpth = "data/new_ratings.xlsx"
 
 # mi
-spth = "data/out/mi.png"
-mi_func(fpth, spth)
+sv_dir = "data/out/"
+mi_func(fpth, sv_dir)
 
 # kmeans
 kout = "data/out/kmeans.xlsx"
@@ -29,7 +29,7 @@ if not efolder:
     print("no language model given, exit..")
     exit()
 
-out_dir = "data/eval"
+out_dir = "data/out/eval"
 train(fpth, efolder, tmp_dir)
 evaluate(fpth, tmp_dir, out_dir)
 

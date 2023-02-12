@@ -58,6 +58,7 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"]):
 
         logging.info("number of splits {}".format(loo.get_n_splits(X)))
         for ir, this_reg in enumerate(regressors):
+            logging.info("Current regressor:{}".format(this_reg))
             regressor = eval(this_reg)
             reg_name = this_reg.split("(")[0]
             each_train(X, Y, loo, regressor, reg_name, epth.stem, out_dir)
