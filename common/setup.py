@@ -16,7 +16,7 @@ except:
     if cur.home().match("/Users/laniqiu/"):
         adr = Path("/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/dough")
     else:
-        adr = Path("/disk/lani/dough/")
+        adr = Path("/disk/lani/")
 
     tmp_dir = adr.joinpath("tmp")
 
