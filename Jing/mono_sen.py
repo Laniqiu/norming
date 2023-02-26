@@ -5,6 +5,7 @@
 提取单义项target word的sense emb
 """
 import sys
+sys.path.insert("/home/qiule/pies/")
 
 from common.setup import adr
 from common.io_utils import load_json, dump_json
