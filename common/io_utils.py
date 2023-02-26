@@ -41,6 +41,11 @@ def load_json(fpth, mode="r"):
 
     return data
 
+def dump_json(obj, fout, mode="w", encoding="utf-8"):
+    import json
+    with codecs.open(fout, encoding=encoding, mode=mode) as fw:
+        json.dump(obj, fw, ensure_ascii=False, indent=4)
+
 def read_csv_pd(fpth, encoding="utf-8"):
     """
     open csv file with pandas and return a data frame object
