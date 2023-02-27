@@ -90,6 +90,10 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
 
         mae = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
         mse = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
+        print(gpth.name)
+        print(mae.mean())
+        print(mse.mean())
+
         spr_a = spearmanr(mae, fs)[0]
         spr_s = spearmanr(mse, fs)[0]
 
@@ -109,19 +113,15 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
 
 
 
-# if __name__ == '__main__':
-#     _ddir = adr.joinpath("binder")
-#
-#     fpth = _ddir.joinpath("Copy of meanRating_July1.xlsx")
-#     wpth = _ddir.joinpath("out4/cc.zh.300_words.txt")
-#     gpat, ppat = "gold", "predict"
-#     pths = _ddir.joinpath("out4").glob("*{}.npy".format(gpat))
-#     out_dir = _ddir.joinpath("out4")
-#
-#     num = 20
-#
-#     main()
+if __name__ == '__main__':
+    from pathlib import Path
+    _ddir = Path("/Users/laniqiu/Library/CloudStorage/" \
+            "OneDrive-TheHongKongPolytechnicUniversity/warehouse/binder/norming/data/")
+    fpth = _ddir.joinpath("new_ratings.xlsx")
+    out_dir = _ddir.joinpath("out/eval2")
+    tmp_dir = _ddir.joinpath("reg_out")
 
+    main(fpth, tmp_dir, out_dir)
 
 
 

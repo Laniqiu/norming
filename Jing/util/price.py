@@ -4,16 +4,21 @@
 @time: 25/2/2023 4:35 pm
 计算人工费
 """
+from os import environ
+environ["LOG_IN_FILE"] = "0"
+
 import pandas as pd
 import sys
 sys.path.insert(0, "/Users/laniqiu/Kitchen/pies/")
+
 
 from common.setup import adr
 
 _dir = adr.joinpath("Jing/300_exps")
 
-# file = _dir.joinpath("钟原high_100.xlsx")
-file = _dir.joinpath(sys.argv[1])
+file = _dir.joinpath("portgas_80low.xlsx")
+
+# file = _dir.joinpath(sys.argv[1])
 
 count = 0
 all_shts = pd.read_excel(file, sheet_name=None)
@@ -27,6 +32,7 @@ for name, sht in all_shts.items():
             continue
 
         if name.strip() not in sht.iloc[i, 1]:
+
             print(name)
             count -= 1
 
