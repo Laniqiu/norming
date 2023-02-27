@@ -5,15 +5,21 @@
 提取单义项target word的sense emb
 """
 import sys
-sys.path.insert("/home/qiule/pies/")
+sys.path.insert(0, "/home/qiule/pies/")
 
 from common.setup import adr
 from common.io_utils import load_json, dump_json
 from utils import load_models, collect_embs, save_vecs
 
 def main(fin, model_path, temp_dir):
-    """"""
-    if not temp_dir.exist():
+    """
+
+    @param fin:
+    @param model_path: str
+    @param temp_dir:
+    @return:
+    """
+    if not temp_dir.exists():
         temp_dir.mkdir(exist_ok=True)
     data = load_json(fin)
     model, tokenizer = load_models(model_path)
@@ -27,7 +33,7 @@ if __name__ == "__main__":
     _dir = adr.joinpath("Jing")
 
     main(_dir.joinpath("samps/100_samps.json"),   # 输入json文件
-         adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # lm模型路径
+         str(adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch")),  # lm模型路径
          _dir.joinpath("mono_sens")  # 单义词sense emb保存目录
     )
 

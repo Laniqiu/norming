@@ -48,7 +48,7 @@ class MyLogger(object):
             self.logger.addHandler(console)
             # print(u'当前控制台生效的日志级别为：', self.logger.getEffectiveLevel())
 
-        if LOG_IN_FILE:  # 如果开启文件日志
+        if LOG_IN_FILE > 0:  # 如果开启文件日志
             rt_file_handler = TimedRotatingFileHandler(self.log_filename, when='D', interval=1,
                                                        backupCount=BACKUP_COUNT)
             rt_file_handler.setFormatter(plain_formatter)
