@@ -2,7 +2,7 @@
 """
 @author: Lani QIU
 @time: 26/2/2023 9:48 pm
-
+想从百度百科抽取义项
 """
 import urllib.request
 import urllib.parse

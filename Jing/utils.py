@@ -34,6 +34,7 @@ def get_each_emb(model, tokenizer, sen, tgt, strategy="hstack"):
     tokens = tokenizer.convert_ids_to_tokens(input_ids)
     # 需要找到target word在tokens中的索引
     lt = tokens.index(tgt[0])
+
     for i in range(tokens.count(tgt[0])):
         mm = "".join(tokens[lt: lt + len(tgt)])
         if mm == tgt:

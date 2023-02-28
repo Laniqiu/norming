@@ -16,7 +16,7 @@ from common.setup import adr
 
 _dir = adr.joinpath("Jing/300_exps")
 
-file = _dir.joinpath("portgas_80low.xlsx")
+file = _dir.joinpath("张茜high-45.xlsx")
 
 # file = _dir.joinpath(sys.argv[1])
 

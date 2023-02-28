@@ -7,7 +7,7 @@ logging 配置
 from os import getenv
 
 LOGGER_NAME = "root"
-LOG_FILE = "../logs/log.log"
+LOG_FILE = getenv("LOG_FILE", "../logs/log.log")
 # 设置
 MAX_BYTES = 512000
 BACKUP_COUNT = 10
