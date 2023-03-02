@@ -7,12 +7,9 @@
 import pandas as pd
 import re
 
-import sys
-sys.path.insert(0, "/home/qiule/pies/")
-
 
 from common.setup import logging, adr, tmp_dir
-from utils import load_models, collect_embs, save_vecs
+from .utils import load_models, collect_embs, save_vecs
 
 
 def pilot(fin, out_dir, model_path, sheet=1):
@@ -81,10 +78,10 @@ def collect(files, model_path, temp_dir):
 
 
 if __name__ == "__main__":
-    model_version = "chinese-roberta-wwm-ext"
-    model_path = tmp_dir.joinpath(model_version)
-
-    temp_dir = tmp_dir.joinpath("svecs")  # 临时数据保存路径
+    # model_version = "chinese-roberta-wwm-ext"
+    # model_path = tmp_dir.joinpath(model_version)
+    #
+    # temp_dir = tmp_dir.joinpath("svecs")  # 临时数据保存路径
 
     # 这是之前pilot study抽取sense的代码
     # pilot(adr.joinpath("Jing/evaluation-target-candidates.xlsx"),  # 输入数据
@@ -94,10 +91,9 @@ if __name__ == "__main__":
 
     # final project抽取sense
     _dir = adr.joinpath("Jing")
-    collect(_dir.joinpath("checking-targets").glob("*.xlsx"),
+    collect(_dir.joinpath("samps/batch_2").glob("*.xlsx"),
             adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # lm模型路径
-            _dir.joinpath("sens_embs")  # 单义词sense emb保存目录
+            _dir.joinpath("sens_embs/batch_2")  # 单义词sense emb保存目录
             )
-
 
 
