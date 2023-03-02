@@ -88,28 +88,34 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         fs = [f for _, f in enumerate(df["BCC(log10)"]) if [df["EngWords"][_], df["words"][_]] in words]  # freq
         fs = np.array(fs, dtype=float)
 
-        mae = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
-        mse = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
-        print(gpth.name)
-        print(mae.mean())
-        print(mse.mean())
+        # feat level
+        mae = mean_absolute_error(gt, pred, multioutput="raw_values")
+        mse = mean_squared_error(gt, pred, multioutput="raw_values")
+        # word level
+        maet = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
+        mset = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
+        # 不同regressor的maet、mset
+        print(gpth.stem)
+        print(maet.mean())
+        print(mset.mean())
+        breakpoint()
 
-        spr_a = spearmanr(mae, fs)[0]
-        spr_s = spearmanr(mse, fs)[0]
+        spr_a = spearmanr(maet, fs)[0]
+        spr_s = spearmanr(mset, fs)[0]
 
         ll = map(str, [model, reg, sp_w.mean(), sp_f.mean(), spr_a, spr_s])
         line = "\t".join(ll) + "\n"
         out1.append(line)
 
-        va = vis(mae, words, num)
-        vs = vis(mse, words, num)
+        va = vis(maet, words, num)
+        vs = vis(mset, words, num)
         for idx, ach in enumerate(va):
             sch = vs[idx]
             out2.append("{}\t{}\t{}\t{}\n".format(model, reg, ach, sch))
-    fout1 = out_dir.joinpath("cor_fea.txt")
-    fout2 = out_dir.joinpath("cor_freq.txt")
-    general_writer(out1, fout1)
-    general_writer(out2, fout2)
+    # fout1 = out_dir.joinpath("cor_fea.txt")
+    # fout2 = out_dir.joinpath("cor_freq.txt")
+    # general_writer(out1, fout1)
+    # general_writer(out2, fout2)
 
 
 
@@ -118,7 +124,7 @@ if __name__ == '__main__':
     _ddir = Path("/Users/laniqiu/Library/CloudStorage/" \
             "OneDrive-TheHongKongPolytechnicUniversity/warehouse/binder/norming/data/")
     fpth = _ddir.joinpath("new_ratings.xlsx")
-    out_dir = _ddir.joinpath("out/eval2")
+    out_dir = _ddir.joinpath("out/eval_test")
     tmp_dir = _ddir.joinpath("reg_out")
 
     main(fpth, tmp_dir, out_dir)

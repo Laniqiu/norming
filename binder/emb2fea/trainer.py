@@ -12,10 +12,6 @@ from sklearn.model_selection import LeaveOneOut
 import numpy as np
 from pathlib import Path
 
-
-
-
-
 from .loader import load_data, load_embeddings, assign_emb_dataset
 from common.setup import logging
 
@@ -75,11 +71,11 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name, out_dir):
     @return:
     """
     Y_output, Y_gold = [], []
+    # todo 需要修改，将Y改成每次只有一个，
     """ training with different regressors"""
     for _, (train_index, test_index) in enumerate(loo.split(X)):
         X_train, X_test = X[train_index], X[test_index]
         Y_train, Y_test = Y[train_index], Y[test_index]
-
         model = regressor.fit(X_train, Y_train)
         Y_pred = model.predict(X_test)
 
@@ -93,3 +89,14 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name, out_dir):
     np.save(gout, Y_gold)
     np.save(oout, Y_output)
 
+# if __name__ == '__main__':
+#
+#     from common.setup import adr
+#     print(adr)
+#     import sys
+#     sys.path.insert(0, "/home/qiule/kitchen/pies")
+#
+#     main(adr.joinpath("binder/new_ratings.xlsx"),  # 输入文件
+#          adr.joinpath("lfs"),  # 模型文件夹
+#          adr.joinpath("binder/out"),
+#          )

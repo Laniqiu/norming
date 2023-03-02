@@ -14,9 +14,9 @@ sys.path.insert(0, "/Users/laniqiu/Kitchen/pies/")
 
 from common.setup import adr
 
-_dir = adr.joinpath("Jing/300_exps")
+_dir = adr.joinpath("Jing")
 
-file = _dir.joinpath("张茜high-45.xlsx")
+file = _dir.joinpath("张颖 min_25.xlsx")
 
 # file = _dir.joinpath(sys.argv[1])
 

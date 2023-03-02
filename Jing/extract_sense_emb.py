@@ -66,8 +66,9 @@ def collect(files, model_path, temp_dir):
     for f in files:
         this_data = pd.read_excel(f, sheet_name=None)
         for tgt, df in this_data.items():
+            tgt = tgt.strip()
             for i in range(df.shape[0]):
-                this_sents = [s.replace(" ", "") for s in df.iloc[i, 1:].dropna() if tgt in s]
+                this_sents = [s.strip().replace(" ", "") for s in df.iloc[i, 1:].dropna() if tgt in s]
                 # 对例句处理
                 if not this_sents:
                     logging.warning("\n No examples found for {}".format(tgt))
@@ -92,7 +93,6 @@ if __name__ == "__main__":
     #      )
 
     # final project抽取sense
-
     _dir = adr.joinpath("Jing")
     collect(_dir.joinpath("checking-targets").glob("*.xlsx"),
             adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # lm模型路径

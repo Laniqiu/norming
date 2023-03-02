@@ -19,7 +19,7 @@ opt, args = parser.parse_args()
 
 
 def main(project, target_folder,
-         run_file="run.py",
+         run_file="oven.py",
          to_ignore=ignore_patterns("*.pyc", "otr*", "*.ipynb_checkpoints", "*lani*")):
     """
     copy common folder, project folder and create log folder

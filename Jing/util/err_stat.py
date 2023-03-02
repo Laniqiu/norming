@@ -63,8 +63,6 @@ def stat(fin, fout):
     outt.to_excel(fout, index=False)
 
 
-
-
 if __name__ == '__main__':
     from common.setup import *
 
