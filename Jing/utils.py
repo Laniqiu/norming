@@ -9,6 +9,7 @@ from transformers import BertTokenizer, BertModel
 from sklearn.metrics.pairwise import cosine_similarity as cos
 import numpy as np
 
+
 def load_models(model_path):
     """
     load tokenizer and model
@@ -21,7 +22,7 @@ def load_models(model_path):
     return model, tokenizer
 
 
-def get_each_emb(model, tokenizer, sen, tgt, strategy="hstack"):
+def get_each_emb(model, tokenizer, sen, tgt, strategy="hstack", device="cpu"):
     """
     extract word vec from sen vec
     @param model:
@@ -30,19 +31,19 @@ def get_each_emb(model, tokenizer, sen, tgt, strategy="hstack"):
     @param tokenizer:
     @return:
     """
-    input_ids = torch.tensor(tokenizer.encode(sen))  # .unsqueeze(0)
-    tokens = tokenizer.convert_ids_to_tokens(input_ids)
-    # 需要找到target word在tokens中的索引
-    lt = tokens.index(tgt[0])
 
-    for i in range(tokens.count(tgt[0])):
-        mm = "".join(tokens[lt: lt + len(tgt)])
-        if mm == tgt:
+    input_ids = torch.tensor(tokenizer.encode(sen)).to(device)  # .unsqueeze(0)
+    tgt_ids = torch.tensor(tokenizer.encode(tgt))[1:-1].to(device)
+    # 需要找到target word在tokens中的索引
+    ix = (input_ids == tgt_ids[0]).nonzero(as_tuple=True)[0]
+    tlen = tgt_ids.size()[0]
+    lt = ix[0]
+    for ii in ix:
+        if (input_ids[ii: ii + tlen] == tgt_ids).all():
+            lt = ii
             break
-        lt = tokens[lt + 1:].index(tgt[0])
     outputs = model(input_ids.unsqueeze(0))[0].squeeze(axis=0)
-    # if strategy == "hstack":
-    vec = outputs[lt:lt + len(tgt), :].flatten()
+    vec = outputs[lt: lt + tlen, :].flatten()
 
     return vec
 
