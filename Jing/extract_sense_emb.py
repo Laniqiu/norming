@@ -91,9 +91,9 @@ if __name__ == "__main__":
 
     # final project抽取sense
     _dir = adr.joinpath("Jing")
-    collect(_dir.joinpath("samps/batch_2").glob("*.xlsx"),
+    collect(_dir.joinpath("samps/batch_3").glob("*.xlsx"),
             adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # lm模型路径
-            _dir.joinpath("sens_embs/batch_2")  # 单义词sense emb保存目录
+            _dir.joinpath("sens_embs/batch_3")  # 单义词sense emb保存目录
             )
 
 

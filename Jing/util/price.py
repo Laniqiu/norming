@@ -16,7 +16,7 @@ from common.setup import adr
 
 _dir = adr.joinpath("Jing")
 
-file = _dir.joinpath("张颖 min_25.xlsx")
+file = _dir.joinpath("Copy of 青青high_75.xlsx")
 
 # file = _dir.joinpath(sys.argv[1])
 

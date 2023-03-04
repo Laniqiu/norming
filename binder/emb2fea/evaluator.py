@@ -53,7 +53,6 @@ def vis(arr, words, num):
 
 def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
     """
-
     @param fpth: path to the ratings
     @param in_dir:
     @param out_dir: output dir
@@ -95,10 +94,10 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         maet = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
         mset = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
         # 不同regressor的maet、mset
+        print("MAE和MSE")
         print(gpth.stem)
         print(maet.mean())
         print(mset.mean())
-        breakpoint()
 
         spr_a = spearmanr(maet, fs)[0]
         spr_s = spearmanr(mset, fs)[0]
@@ -112,22 +111,58 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         for idx, ach in enumerate(va):
             sch = vs[idx]
             out2.append("{}\t{}\t{}\t{}\n".format(model, reg, ach, sch))
-    # fout1 = out_dir.joinpath("cor_fea.txt")
-    # fout2 = out_dir.joinpath("cor_freq.txt")
-    # general_writer(out1, fout1)
-    # general_writer(out2, fout2)
+    fout1 = out_dir.joinpath("cor_fea.txt")
+    fout2 = out_dir.joinpath("cor_freq.txt")
+    general_writer(out1, fout1)
+    general_writer(out2, fout2)
+
+
+def grouping(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
+    in_dir, out_dir = Path(in_dir), Path(out_dir)
+    if not out_dir.exists():
+        out_dir.mkdir()
+    pths = in_dir.glob("*{}.npy".format(gpat))
+
+    df = pd.read_excel(fpth)
+    # 按type(或dimension)和POS分类
+    ddict, pdict = {}, {}
+    for _, d in enumerate(df.iloc[4, 11:]):
+        ddict[d] = ddict.get(d, []) + [_]
+    for p, e in zip(df.pos[5:], df.EngWords[5:]):
+        pdict[p] = pdict.get(p, []) + [e]
+
+    # out1 = ["Group\tModel\tRegressor\tWord Correlation\tFeature Correlation\tMAE-Freq\tMSE-Freq\n"]
+    # out2 = ["Group\tModel\tRegressor\tTop(MAE)\t\t\tBottom(MAE)\t\t\tTop(MSE)\t\t\tBottom(MSE)\t\t\n"]
+
+
+    for gpth in sorted(pths):
+        logging.info("Processing {}".format(gpth))
+        # load saved output & gt
+        model, reg, _ = gpth.name.split("_")  # language model, regressor
+        ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
+        gt = np.load(gpth).squeeze()
+        pred = np.load(ppth).squeeze()
+
+
+    #     # 分类
+    #     # sp_f, sp_w = spr_words_feas(gt, pred)  # spearmanr by word & by fea
+    #
+
+
 
 
 
 if __name__ == '__main__':
-    from pathlib import Path
-    _ddir = Path("/Users/laniqiu/Library/CloudStorage/" \
-            "OneDrive-TheHongKongPolytechnicUniversity/warehouse/binder/norming/data/")
+
+    _ddir = adr.joinpath("binder")
+
     fpth = _ddir.joinpath("new_ratings.xlsx")
     out_dir = _ddir.joinpath("out/eval_test")
     tmp_dir = _ddir.joinpath("reg_out")
 
-    main(fpth, tmp_dir, out_dir)
+    # main(fpth, tmp_dir, out_dir)
+
+    grouping(fpth, tmp_dir, out_dir)
 
 
 

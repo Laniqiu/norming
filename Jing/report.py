@@ -36,54 +36,31 @@ def main(model_path, fdir, svec_dir, out_dir, dim=768):
     # 根据sense vec去找year data， 目标文件夹
     tgt_folder = [f.name.split("_")[0] for f in svec_dir.glob("*") if "_" in f.name]
     tgt_folder = list(set(tgt_folder))
-    for sd_folder in sorted(fdir.iterdir()):
-        if not sd_folder.is_dir():
+
+    for tgt in tgt_folder:
+        year_folder = fdir.glob("*/{}/*.txt".format(tgt))
+        logging.info("Start processing folder: {}".format(tgt))
+        ssv = [(spth.stem, load_vecs(spth)) for spth in sorted(svec_dir.glob(f"{tgt}_*"))]
+        if not ssv:
+            logging.warning("No sense vectors for {}".format(tgt))
             continue
-        for folder in sorted(sd_folder.iterdir()):
-            if not folder.is_dir():
-                continue
-            tgt = folder.name.strip()  # target word
-            # todo 需要删除的代码
-            if tgt not in tgt_folder:  # sense emb文件夹
-                continue
-            if tgt in skip_folder:
-                logging.info(f"Skip folder: {tgt}")
-                continue
-            logging.info("Start processing folder: {}".format(tgt))
-            # list: (sense, vec)...
-            # pilot
-            # ssv = [(spth.stem, load_vecs(spth)) for spth in sorted(svec_dir.joinpath(tgt).glob("*"))]
-            # final
-            ssv = [(spth.stem, load_vecs(spth)) for spth in sorted(svec_dir.glob(f"{tgt}_*"))]
-            if not ssv:
-                logging.warning("No sense vectors for {}".format(tgt))
-                continue
-            ss, vv = zip(*ssv)  # sense, sense_vec (i.e., gt)
-            mat = [v.cpu().detach().numpy().squeeze() for v in vv]
+        ss, vv = zip(*ssv)  # sense, sense_vec (i.e., gt)
+        mat = [v.cpu().detach().numpy().squeeze() for v in vv]
 
-            this_outdr = out_dir.joinpath(tgt)
-            this_outdr.mkdir(parents=True, exist_ok=True)
+        this_outdr = out_dir.joinpath(tgt)
+        this_outdr.mkdir(parents=True, exist_ok=True)
 
-            # 多进程
-            wks = []  # 多线程
-            # st = time()
-            for year in tqdm(sorted(folder.glob("*.txt"))):
-                if year.name.startswith("."):  # skip 隐藏文件
-                    continue
-                this_work = Thread(target=process_one_year, args=(year, tgt, this_outdr, model, tokenizer, mat, ss))
-                wks.append(this_work)
-                this_work.start()
-            for wk in wks:
-                wk.join()
-            # print("用时", time() - st)
-            # st = time()
-            # for year in tqdm(sorted(folder.glob("*.txt"))):
-            #     if year.name.startswith("."):  # skip 隐藏文件
-            #         continue
-            #     process_one_year(year, tgt, this_outdr, model, tokenizer, mat, ss)
-            # print("用时", time() - st)
-            # breakpoint()
-
+        # 多进程
+        wks = []  # 多线程
+        # st = time()
+        for year in tqdm(sorted(year_folder)):
+            if year.name.startswith("."):  # skip 隐藏文件
+                continue
+            this_work = Thread(target=process_one_year, args=(year, tgt, this_outdr, model, tokenizer, mat, ss))
+            wks.append(this_work)
+            this_work.start()
+        for wk in wks:
+            wk.join()
 
 
 def process_one_year(*args):
@@ -134,16 +111,16 @@ if __name__ == "__main__":
 
     # todo 暂时不处理 + 已处理完， 决心好像没整完
 
-    skip_folder = ["阶级", "批"] + ["建", "节"] + \
-                  ['不断', '中心', '乡', '产业', '介绍', '代表', '企图', '传统', '作', '保障', '党', '内奸', '决定',
-                   '决心', '出口', '出现', '分', '创新', '到底', '办', '努力', '协议', '历史', '原则', '反'] + \
-                  ['公德', '公文', '公证', '反', '合谋', '回', '回复', '姑娘', '富民', '根源', '画卷', '祸害',
-                   '舰只', '荟萃', '较', '过', '金币', '饭厅', "个人"]
+    # skip_folder = ["阶级", "批"] + ["建", "节"] + \
+    #               ['不断', '中心', '乡', '产业', '介绍', '代表', '企图', '传统', '作', '保障', '党', '内奸', '决定',
+    #                '决心', '出口', '出现', '分', '创新', '到底', '办', '努力', '协议', '历史', '原则', '反'] + \
+    #               ['公德', '公文', '公证', '反', '合谋', '回', '回复', '姑娘', '富民', '根源', '画卷', '祸害',
+    #                '舰只', '荟萃', '较', '过', '金币', '饭厅', "个人"]
 
     _dir = adr.joinpath("Jing")
     main(adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # 模型路径， str
          _dir.joinpath("bert-target-year-data"),  # 年份文件数据
-         _dir.joinpath("sens_embs/batch_2"),  # gt数据
-         _dir.joinpath("scores/batch_2"),  # 文件生成保存路径
+         _dir.joinpath("sens_embs/batch_3"),  # gt数据
+         _dir.joinpath("scores/batch_3"),  # 文件生成保存路径
          )
 

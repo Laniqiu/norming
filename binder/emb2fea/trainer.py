@@ -13,7 +13,7 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 from threading import Thread
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, Pool
 
 from .loader import load_data, load_embeddings, assign_emb_dataset, generate_random_embs
 from common.setup import logging
@@ -79,6 +79,13 @@ def baseline(fpth, out_dir, rand_dims=300):
     vectors, dim = generate_random_embs(_data, rand_dims)
     X, Y, words = assign_emb_dataset(_data, _data, vectors, dim)
 
+    fout = out_dir.joinpath("random_words.txt".format())
+    if not fout.exists():
+        words = [f"{e}\t{c}\n" for (e, c) in words]
+        logging.info("Saving words at {}".format(fout))
+        with open(fout, "w") as fw:
+            fw.writelines(words)
+
     for ir, this_reg in enumerate(regressors):
         logging.info("Current regressor:{}".format(this_reg))
         regressor = eval(this_reg)
@@ -99,12 +106,10 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name, out_dir):
     Y_output, Y_gold = [], []
     pbar = tqdm(total=X.shape[0])
     """ training with different regressors"""
-    wks = []
     for _, (train_index, test_index) in enumerate(loo.split(X)):
         func(X, Y, Y_gold, Y_output, regressor, test_index, train_index)
         pbar.update(1)
     pbar.close()
-    # 保存Y_gold, Y_output
     logging.info("saving gt & output...")
     gout = out_dir.joinpath("{}_{}_gold".format(emb_name, reg_no))
     oout = out_dir.joinpath("{}_{}_predict".format(emb_name, reg_no))
@@ -117,6 +122,7 @@ def func(X, Y, Y_gold, Y_output, regressor, test_index, train_index):
     Y_train, Y_test = Y[train_index], Y[test_index]
     model = regressor.fit(X_train, Y_train)
     Y_pred = model.predict(X_test)
+    # return Y_pred, Y_test
     Y_output.append(Y_pred)
     Y_gold.append(Y_test)
 
