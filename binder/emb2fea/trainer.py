@@ -19,10 +19,10 @@ from .loader import load_data, load_embeddings, assign_emb_dataset, generate_ran
 from common.setup import logging
 
 
-regressors = ["RandomForestRegressor()",
+regressors = [#"RandomForestRegressor()",
               "Ridge()",
-              """MLPRegressor(hidden_layer_sizes=(50, 10), 
-              activation='identity', solver='adam', early_stopping=True, max_iter=1000)"""
+              #"""MLPRegressor(hidden_layer_sizes=(50, 10),
+              #activation='identity', solver='adam', early_stopping=True, max_iter=1000)"""
               ]
 
 def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
@@ -42,10 +42,6 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
 
     loo = LeaveOneOut()
     for epth in efolder.glob("*"):
-        # if rand_dims:
-        #     logging.info("generating random embs ...")
-        #     vectors, dim = generate_random_embs(_data, rand_dims)
-        # else:
         if epth.suffix not in emb_sufix:  # in case hidden files exist
             continue
         logging.info("load embeddings from {} ...".format(epth.name))
@@ -65,6 +61,7 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
             regressor = eval(this_reg)
             reg_name = this_reg.split("(")[0]
             each_train(X, Y, loo, regressor, reg_name, epth.stem, out_dir)
+
 
 def baseline(fpth, out_dir, rand_dims=300):
     fpth = Path(fpth)

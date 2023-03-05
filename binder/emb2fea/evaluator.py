@@ -12,6 +12,8 @@ from scipy.stats import spearmanr
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from pathlib import Path
 
+from collections import OrderedDict
+
 from common.setup import *
 from common.io_utils import general_reader, general_writer
 
@@ -29,12 +31,14 @@ def spr_words_feas(Y_test, Y_pred):
 
     wn, fn = Y_test.shape
     for i in range(fn):
+
         var = spearmanr(Y_test[:, i], Y_pred[:, i])[0]
         sp_f.append(var)
 
     for i in range(wn):
         var = spearmanr(Y_test[i], Y_pred[i])[0]
         sp_w.append(var)
+
     return np.array(sp_f, dtype=float), np.array(sp_w, dtype=float)
 
 
@@ -94,10 +98,6 @@ def main(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         maet = mean_absolute_error(gt.T, pred.T, multioutput="raw_values")
         mset = mean_squared_error(gt.T, pred.T, multioutput="raw_values")
         # 不同regressor的maet、mset
-        print("MAE和MSE")
-        print(gpth.stem)
-        print(maet.mean())
-        print(mset.mean())
 
         spr_a = spearmanr(maet, fs)[0]
         spr_s = spearmanr(mset, fs)[0]
@@ -125,15 +125,13 @@ def grouping(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
 
     df = pd.read_excel(fpth)
     # 按type(或dimension)和POS分类
-    ddict, pdict = {}, {}
+    ddict = {}
     for _, d in enumerate(df.iloc[4, 11:]):
         ddict[d] = ddict.get(d, []) + [_]
-    for p, e in zip(df.pos[5:], df.EngWords[5:]):
-        pdict[p] = pdict.get(p, []) + [e]
+    pdict = dict(zip(df.EngWords[5:], df.pos[5:]))
 
-    # out1 = ["Group\tModel\tRegressor\tWord Correlation\tFeature Correlation\tMAE-Freq\tMSE-Freq\n"]
-    # out2 = ["Group\tModel\tRegressor\tTop(MAE)\t\t\tBottom(MAE)\t\t\tTop(MSE)\t\t\tBottom(MSE)\t\t\n"]
-
+    out1 = ["Group\tModel\tRegressor\tCorrelation\n"]
+    out2 = ["Group\tModel\tRegressor\tCorrelation\n"]
 
     for gpth in sorted(pths):
         logging.info("Processing {}".format(gpth))
@@ -143,11 +141,64 @@ def grouping(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         gt = np.load(gpth).squeeze()
         pred = np.load(ppth).squeeze()
 
+        wpth = in_dir.joinpath("{}_words.txt".format(model))
+        words = [e.strip().split("\t") for e in general_reader(wpth)]
+        # vec按pos grouping
+        pos_gp = {}
+        for _, (e, c) in enumerate(words):
+            pos = pdict[e]
+            pos_gp[pos] = pos_gp.get(pos, []) + [_]
+        for ky, va in pos_gp.items():
+            sp_f, sp_w = spr_words_feas(gt[va], pred[va])
+            # word level
+            maet = mean_absolute_error(gt[va].T, pred[va].T, multioutput="raw_values")
+            mset = mean_squared_error(gt[va].T, pred[va].T, multioutput="raw_values")
+            ll = map(str, [ky, model, reg, sp_w.mean()])
+            line = "\t".join(ll) + "\n"
+            out1.append(line)
 
-    #     # 分类
-    #     # sp_f, sp_w = spr_words_feas(gt, pred)  # spearmanr by word & by fea
-    #
+        for ky, va in ddict.items():
+      
+            # spearmanr(Y_test[i], Y_pred[i])[0]
+            sp_f, sp_w = spr_words_feas(gt.T[va], pred.T[va])
 
+
+            # maet = mean_absolute_error(gt[va], pred[va], multioutput="raw_values")
+            # mset = mean_squared_error(gt[va], pred[va], multioutput="raw_values")
+            ll = map(str, [ky, model, reg, sp_w.mean()])
+            line = "\t".join(ll) + "\n"
+            out2.append(line)
+
+        fout1 = out_dir.joinpath("words_grouping.txt")
+        fout2 = out_dir.joinpath("feat_grouping.txt")
+        general_writer(out1, fout1)
+        general_writer(out2, fout2)
+
+
+
+
+def draw_heatmap(fpth, fout, fig=(3, 5)):
+    # 绘图
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    plt.figure(figsize=fig, dpi=200)
+    sns.set(font_scale=1)
+    # 构造dataframe
+    ddict = {}
+    rnames = []
+    for line in general_reader(fpth)[1:]:
+        gr, emb, _, wc = line.strip().split("\t")
+        ddict[gr] = ddict.get(gr, []) + [float(wc)]
+
+        if emb not in rnames:
+            rnames.append(emb)
+
+    dr = pd.DataFrame.from_dict(ddict, )
+    dr.index = rnames
+    ax = sns.heatmap(dr, cmap="YlOrRd", xticklabels=True, yticklabels=True,)
+    plt.tick_params(axis="both", labelsize=10)
+    plt.savefig(fout)
+    plt.show()
 
 
 
@@ -157,13 +208,15 @@ if __name__ == '__main__':
     _ddir = adr.joinpath("binder")
 
     fpth = _ddir.joinpath("new_ratings.xlsx")
-    out_dir = _ddir.joinpath("out/eval_test")
-    tmp_dir = _ddir.joinpath("reg_out")
+    out_dir = _ddir.joinpath("out_grouping")
+    tmp_dir = _ddir.joinpath("out_grouping")
 
     # main(fpth, tmp_dir, out_dir)
 
     grouping(fpth, tmp_dir, out_dir)
-
+    draw_heatmap(out_dir.joinpath("feat_grouping.txt"),
+                 out_dir.joinpath("feat.png"),
+                 (9,9))
 
 
 

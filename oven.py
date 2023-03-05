@@ -4,22 +4,21 @@
 @time: 1/3/2023 1:48 pm
 
 """
-# from binder.emb2fea.trainer import baseline
+# import os
+# os.environ["LOG_FILE"] = "logs/log.log"
+# os.environ["LOG_IN_FILE"] = "0"
+
+
+# from binder.emb2fea.trainer import main as train
+# from common.setup import adr
+# from Jing.extract_sense_emb import collect
+
 from common.setup import adr
-from Jing.extract_sense_emb import collect
+from binder.emb2fea.trainer import main
 
-# 提取sense emb
-_dir = adr.joinpath("Jing")
-# collect(_dir.joinpath("samps/batch_3").glob("*.xlsx"),
-#         adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # lm模型路径
-#         _dir.joinpath("sens_embs/batch_3")  # 单义词sense emb保存目录
-#         )
 
-from Jing.report import main
+efolder = adr.joinpath("embeddings")
+fpth = adr.joinpath("new_ratings.xlsx")
+out_dir = adr.joinpath("out_grouping")
 
-main(adr.joinpath("lfs/chinese_roberta_wwm_ext_pytorch"),  # 模型路径， str
-     _dir.joinpath("bert-target-year-data"),  # 年份文件数据
-     _dir.joinpath("sens_embs/batch_3"),  # gt数据
-     _dir.joinpath("scores/batch_3"),  # 文件生成保存路径
-     )
-
+main(fpth, efolder, out_dir)

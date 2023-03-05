@@ -1,10 +1,10 @@
 
 import pandas as pd
-from pathlib import Path
+
 
 from common.setup import *
 
-from binder.utils.mi_replication import cal_pairwise_mi, cal_bt_attrs, \
+from utils.mi_replication import cal_pairwise_mi, cal_bt_attrs, \
     generate_heatmap, visualize_for_me
 
 
