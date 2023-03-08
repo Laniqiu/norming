@@ -39,8 +39,8 @@ def tess_ocr(fname, out_name="out.txt", lang="eng"):
 	# Close File Descriptors
 	merger.close()
 	output.close()
-	# shutil.rmtree(dirname)
-	# os.remove(fname)
+	shutil.rmtree(dirname)
+	os.remove(fname)
 
-fname = "/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/dough/Jing/in.pdf"
+fname = "/Users/laniqiu/Downloads/out.pdf"
 text = tess_ocr(fname, out_name="test.pdf")

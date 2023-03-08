@@ -137,12 +137,18 @@ def grouping(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         logging.info("Processing {}".format(gpth))
         # load saved output & gt
         model, reg, _ = gpth.name.split("_")  # language model, regressor
+
         ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
         gt = np.load(gpth).squeeze()
         pred = np.load(ppth).squeeze()
 
         wpth = in_dir.joinpath("{}_words.txt".format(model))
         words = [e.strip().split("\t") for e in general_reader(wpth)]
+
+        if "align" in model:  # todo 跳过align
+            continue
+        model = mapping[model]
+
         # vec按pos grouping
         pos_gp = {}
         for _, (e, c) in enumerate(words):
@@ -188,11 +194,16 @@ def draw_heatmap(fpth, fout, fig=(3, 5)):
     rnames = []
     for line in general_reader(fpth)[1:]:
         gr, emb, _, wc = line.strip().split("\t")
+        if "align" in emb:
+            continue
         ddict[gr] = ddict.get(gr, []) + [float(wc)]
 
         if emb not in rnames:
             rnames.append(emb)
+    # names = []
 
+    # for i in rnames:
+    #     names.append(mapping[i])
     dr = pd.DataFrame.from_dict(ddict, )
     dr.index = rnames
     ax = sns.heatmap(dr, cmap="YlOrRd", xticklabels=True, yticklabels=True,)
@@ -212,11 +223,14 @@ if __name__ == '__main__':
     tmp_dir = _ddir.joinpath("out_grouping")
 
     # main(fpth, tmp_dir, out_dir)
+    mapping = {"cc.zh.300":  "fast.cc.zh",
+               "sgns.wiki": "sgns.wiki.zh",
+               "wiki.zh": "fast.wiki.zh"}
 
-    grouping(fpth, tmp_dir, out_dir)
-    draw_heatmap(out_dir.joinpath("feat_grouping.txt"),
-                 out_dir.joinpath("feat.png"),
-                 (9,9))
+    # grouping(fpth, tmp_dir, out_dir)
+    draw_heatmap(out_dir.joinpath("words_grouping.txt"),
+                 out_dir.joinpath("pos.png"),
+                 (3,4))
 
 
 
