@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-@author: Lani QIU
 @time: 1/1/2023 9:51 am
 """
 import logging

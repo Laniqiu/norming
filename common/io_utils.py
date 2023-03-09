@@ -2,7 +2,6 @@
 
 """
 commonly used functions: write, read, etc.
-读写
 """
 import codecs
 
