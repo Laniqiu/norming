@@ -85,6 +85,8 @@ def evaluate(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
     out2 = ["Group\tVectors\tModel\tCorrelation\n"]
     out3 = ["Group\tVectors\tModel\tCorrelation\n"]
 
+    logging.info("Evaluation starts ...")
+
     for gpth in sorted(pths):
         print(gpth)
         logging.info("Processing {}".format(gpth))
