@@ -158,14 +158,6 @@ def assign_emb_dataset(ds, ds_words, embs, dim, norm_dim=68):
     return X, Y, words
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-    fpth = "/Users/laniqiu/My Drive/dough/sps"
-    fout = "/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/assignments/binder/" \
-           "spearman_lasso_only.txt"
-    files = sorted(Path(fpth).glob("*_fea.npy"))
-
-
 
 
 

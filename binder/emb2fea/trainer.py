@@ -12,20 +12,20 @@ from sklearn.model_selection import LeaveOneOut
 import numpy as np
 from pathlib import Path
 from tqdm import tqdm
-from threading import Thread
-from multiprocessing import Process, Queue, Pool
 
 from .loader import load_data, load_embeddings, assign_emb_dataset, generate_random_embs
-from common.setup import logging
+from common.log_util import logging
 
 
-regressors = [#"RandomForestRegressor()",
+regressors = [
+              "RandomForestRegressor()",
               "Ridge()",
-              #"""MLPRegressor(hidden_layer_sizes=(50, 10),
-              #activation='identity', solver='adam', early_stopping=True, max_iter=1000)"""
+              """MLPRegressor(hidden_layer_sizes=(50, 10),
+              activation='identity', solver='adam', early_stopping=True, max_iter=1000)"""
               ]
 
-def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
+
+def train(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
     """
     @param fpth: data path
     @param efolder: folder of embeddings
@@ -34,8 +34,8 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
     fpth = Path(fpth)
     efolder = Path(efolder)
     out_dir = Path(out_dir)
-    if not out_dir.exists():
-        out_dir.mkdir()
+
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     logging.info("load data from {} ...".format(fpth.name))
     _data = load_data(fpth)
@@ -64,6 +64,14 @@ def main(fpth, efolder, out_dir, emb_sufix=[".vec", ".word"], rand_dims=None):
 
 
 def baseline(fpth, out_dir, rand_dims=300):
+    """
+    run baseline experiment
+    @param fpth:
+    @param out_dir:
+    @param rand_dims:
+    @return:
+    """
+    logging.info("Baseline experiment starts ...")
     fpth = Path(fpth)
     out_dir = Path(out_dir)
     if not out_dir.exists():
@@ -115,22 +123,20 @@ def each_train(X, Y, loo, regressor, reg_no, emb_name, out_dir):
 
 
 def func(X, Y, Y_gold, Y_output, regressor, test_index, train_index):
+    """
+    func for each train
+    @param X:
+    @param Y:
+    @param Y_gold:
+    @param Y_output:
+    @param regressor:
+    @param test_index:
+    @param train_index:
+    @return:
+    """
     X_train, X_test = X[train_index], X[test_index]
     Y_train, Y_test = Y[train_index], Y[test_index]
     model = regressor.fit(X_train, Y_train)
     Y_pred = model.predict(X_test)
-    # return Y_pred, Y_test
     Y_output.append(Y_pred)
     Y_gold.append(Y_test)
-
-# if __name__ == '__main__':
-#
-#     from common.setup import adr
-#     print(adr)
-#     import sys
-#     sys.path.insert(0, "/home/qiule/kitchen/pies")
-#
-#     main(adr.joinpath("binder/new_ratings.xlsx"),  # 输入文件
-#          adr.joinpath("lfs"),  # 模型文件夹
-#          adr.joinpath("binder/out"),
-#          )
