@@ -81,16 +81,15 @@ def evaluate(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         ddict[d] = ddict.get(d, []) + [_]
     pdict = dict(zip(df.EngWords[5:], df.pos[5:]))
 
-
     out1 = ["Vectors\tModel\tWord Correlation\tFeature Correlation\n"]
     out2 = ["Group\tVectors\tModel\tCorrelation\n"]
     out3 = ["Group\tVectors\tModel\tCorrelation\n"]
 
     for gpth in sorted(pths):
+        print(gpth)
         logging.info("Processing {}".format(gpth))
         # load saved output & gt
         model, reg, _ = gpth.name.split("_")  # language model, regressor
-        model = mapping[model]
 
         ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
         gt = np.load(gpth).squeeze()
@@ -99,54 +98,15 @@ def evaluate(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
         wpth = in_dir.joinpath("{}_words.txt".format(model))
         words = [e.strip().split("\t") for e in general_reader(wpth)]
 
-        # overall correlation
+        model = mapping[model]
+        logging.info("start computiing overall correlation")
         sp_f, sp_w = spr_words_feas(gt, pred)  # spearmanr by word & by fea
         ll = map(str, [model, reg, sp_w.mean(), sp_f.mean()])
         line = "\t".join(ll) + "\n"
         out1.append(line)
 
-        # in-group correlation
-
-
-
-
-    fout1 = out_dir.joinpath("cor_fea.txt")
-    general_writer(out1, fout1)
-
-
-def grouping(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
-    in_dir, out_dir = Path(in_dir), Path(out_dir)
-    if not out_dir.exists():
-        out_dir.mkdir()
-    pths = in_dir.glob("*{}.npy".format(gpat))
-
-    df = pd.read_excel(fpth)
-    # 按type(或dimension)和POS分类
-    ddict = {}
-    for _, d in enumerate(df.iloc[4, 11:]):
-        ddict[d] = ddict.get(d, []) + [_]
-    pdict = dict(zip(df.EngWords[5:], df.pos[5:]))
-
-    out1 = ["Group\tModel\tRegressor\tCorrelation\n"]
-    out2 = ["Group\tModel\tRegressor\tCorrelation\n"]
-
-    for gpth in sorted(pths):
-        logging.info("Processing {}".format(gpth))
-        # load saved output & gt
-        model, reg, _ = gpth.name.split("_")  # language model, regressor
-
-        ppth = gpth.parent.joinpath(gpth.name.replace(gpat, ppat))
-        gt = np.load(gpth).squeeze()
-        pred = np.load(ppth).squeeze()
-
-        wpth = in_dir.joinpath("{}_words.txt".format(model))
-        words = [e.strip().split("\t") for e in general_reader(wpth)]
-
-        if "align" in model:  # todo 跳过align
-            continue
-        model = mapping[model]
-
-        # vec按pos grouping
+        logging.info("start computiing in-group correlation")
+        # 按pos grouping
         pos_gp = {}
         for _, (e, c) in enumerate(words):
             pos = pdict[e]
@@ -155,21 +115,22 @@ def grouping(fpth, in_dir, out_dir, gpat="gold", ppat="predict", num=10):
             sp_f, sp_w = spr_words_feas(gt[va], pred[va])
             ll = map(str, [ky, model, reg, sp_w.mean()])
             line = "\t".join(ll) + "\n"
-            out1.append(line)
-
+            out2.append(line)
+        # 按domain grouping
         for ky, va in ddict.items():
-      
-            # spearmanr(Y_test[i], Y_pred[i])[0]
             sp_f, sp_w = spr_words_feas(gt.T[va], pred.T[va])
             ll = map(str, [ky, model, reg, sp_w.mean()])
             line = "\t".join(ll) + "\n"
-            out2.append(line)
+            out3.append(line)
 
-        fout1 = out_dir.joinpath("words_grouping.txt")
-        fout2 = out_dir.joinpath("feat_grouping.txt")
-        general_writer(out1, fout1)
-        general_writer(out2, fout2)
+    fout1 = out_dir.joinpath("overall.txt")
+    fout2 = out_dir.joinpath("pos.txt")
+    fout3 = out_dir.joinpath("domain.txt")
+    general_writer(out1, fout1)
+    general_writer(out2, fout2)
+    general_writer(out3, fout3)
 
+    logging.info("done evaluation")
 
 
 def draw_heatmap(fpth, fout, fig=(3, 5)):
@@ -196,31 +157,6 @@ def draw_heatmap(fpth, fout, fig=(3, 5)):
     plt.tick_params(axis="both", labelsize=10)
     plt.savefig(fout)
     plt.show()
-
-
-
-
-if __name__ == '__main__':
-
-    _ddir = adr.joinpath("binder")
-
-    fpth = _ddir.joinpath("new_ratings.xlsx")
-    out_dir = _ddir.joinpath("out_grouping")
-    tmp_dir = _ddir.joinpath("out_grouping")
-
-    # main(fpth, tmp_dir, out_dir)
-    mapping = {"cc.zh.300":  "fast.cc.zh",
-               "sgns.wiki": "sgns.wiki.zh",
-               "wiki.zh": "fast.wiki.zh"}
-
-    # grouping(fpth, tmp_dir, out_dir)
-    draw_heatmap(out_dir.joinpath("words_grouping.txt"),
-                 out_dir.joinpath("pos.png"),
-                 (3,4))
-
-
-
-
 
 
 

@@ -17,8 +17,8 @@ def main():
     tmp_dir = "data/out/tmp"
     randm_dir = "data/out/random"
 
-    train(fpth, efolder, tmp_dir)
-    baseline(fpth, randm_dir)
+    # train(fpth, efolder, tmp_dir)
+    # baseline(fpth, randm_dir)
     evaluate(fpth, tmp_dir, out_dir)
 
 
