@@ -3,10 +3,9 @@
 @time: 1/1/2023 8:02 pm
 logging 配置
 """
-from os import getenv
 
 LOGGER_NAME = "root"
-LOG_FILE = getenv("LOG_FILE", "../logs/log.log")
+LOG_FILE = "logs/log.log"
 # 设置
 MAX_BYTES = 512000
 BACKUP_COUNT = 10
@@ -16,7 +15,7 @@ BACKUP_COUNT = 10
 CONSOLE_LEVEL = 10
 FILE_LEVEL = 20
 LOG_IN_CONSOLE = True
-LOG_IN_FILE = int(getenv("LOG_IN_FILE", "1"))
+LOG_IN_FILE = 1
 
 
 PLAIN_FMT = "%(asctime)s-%(levelname)s-%(filename)s-%(lineno)s > %(message)s"
