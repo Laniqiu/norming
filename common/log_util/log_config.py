@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-@author: Lani QIU
 @time: 1/1/2023 8:02 pm
 logging 配置
 """
-import os
 
 LOGGER_NAME = "root"
 LOG_FILE = "logs/log.log"
@@ -17,7 +15,7 @@ BACKUP_COUNT = 10
 CONSOLE_LEVEL = 10
 FILE_LEVEL = 20
 LOG_IN_CONSOLE = True
-LOG_IN_FILE = os.getenv("LOG_IN_FILE", True)
+LOG_IN_FILE = 1
 
 
 PLAIN_FMT = "%(asctime)s-%(levelname)s-%(filename)s-%(lineno)s > %(message)s"

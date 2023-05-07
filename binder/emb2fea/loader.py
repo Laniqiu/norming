@@ -33,8 +33,21 @@ def load_data(fname, irow=5, icol=11, ecol=79):
 
     return des
 
+def generate_random_embs(ds_words, rand_dims=300):
+    emb = {}
+    matrix = []
+    dims = 0
+    keys = [key for key in ds_words if key not in ['domains', '_matrix_']]
+    _, tgts = zip(*keys)
+    # generate random embs
+    for word in tgts:
+        arrays = np.random.random(rand_dims)
+        emb[word] = len(matrix)
+        matrix.append(arrays)
+    emb['_matrix_'] = np.array(matrix)
+    return emb, rand_dims
 
-def load_embeddings(fname, ds_words):
+def load_embeddings(fname, ds_words, rand_dims=0):
     """
     @param fname: path of word embeddings
     @param ds_words: target words
@@ -45,6 +58,7 @@ def load_embeddings(fname, ds_words):
     dims = 0
     keys = [key for key in ds_words if key not in ['domains', '_matrix_']]
     _, tgts = zip(*keys)
+
 
     with open(fname, 'r', encoding='utf-8', errors="ignore") as f:
         for line in f:
@@ -142,14 +156,6 @@ def assign_emb_dataset(ds, ds_words, embs, dim, norm_dim=68):
         Y.append(norm)
     X, Y = np.array(X), np.array(Y)
     return X, Y, words
-
-
-if __name__ == "__main__":
-    from pathlib import Path
-    fpth = "/Users/laniqiu/My Drive/dough/sps"
-    fout = "/Users/laniqiu/Library/CloudStorage/OneDrive-TheHongKongPolytechnicUniversity/assignments/binder/" \
-           "spearman_lasso_only.txt"
-    files = sorted(Path(fpth).glob("*_fea.npy"))
 
 
 
