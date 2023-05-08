@@ -2,7 +2,7 @@
 
 Source code for [Collecting and Predicting Neurocognitive Norms for Mandarin Chinese]
 
-The regression experiments in the paper have been done with traditional static embeddings. You can find them from https://fasttext.cc/docs/en/pretrained-vectors.html, or seek other resources. 
+The regression experiments in the paper have been done with traditional static embeddings. You can find FastText vectors from https://fasttext.cc/docs/en/pretrained-vectors.html, PPMI and Word2Vec ones from https://github.com/Embedding/Chinese-Word-Vectors, or you can seek other resources. 
 
 
 ## Experiment Replication
