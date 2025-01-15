@@ -1,6 +1,7 @@
 # Collecting and Predicting Neurocognitive Norms for Mandarin Chinese
 
-Source code for [Collecting and Predicting Neurocognitive Norms for Mandarin Chinese]. We would appreciate it if you cite our paper as following:
+This is the project for our paper [Collecting and Predicting Neurocognitive Norms for Mandarin Chinese](https://aclanthology.org/2023.iwcs-1.24/).
+We would appreciate it if you cite our paper as following:
 
 Le Qiu, Yu-Yin Hsu, Emmanuele Chersoni (2023). Collecting and Predicting Neurocognitive Norms for Mandarin Chinese. In: Proceedings of IWCS.
 
